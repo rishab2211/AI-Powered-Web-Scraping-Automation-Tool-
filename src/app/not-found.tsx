@@ -1,21 +1,24 @@
 
 'use client'
 
-// import Lottie from "lottie-react"
-// import animationData from "../../public/not-found-lottie.json"
+import animationData from "../../public/not-found-lottie.json"
+
+import dynamic from 'next/dynamic';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+
+
 
 const NotFound = () => {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      {/* <Lottie
+      <Lottie
         animationData={animationData}
         loop={true}
         autoplay={true}
         style={{ height: 500, width: 500 }}
         onClick={() => {}} // This disables click to pause
-      /> */}
-
-      NOT FOUND
+      />
     </div>
   )
 }

@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CoinsIcon, Home, Layers2Icon, ShieldCheckIcon,Command, Workflow } from "lucide-react"
-import { NavUser } from "@/components/nav-user"
+import * as React from "react";
+import {
+  CoinsIcon,
+  Home,
+  WorkflowIcon,
+  ShieldCheckIcon,
+  Workflow,
+} from "lucide-react";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -14,16 +20,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
 
 // This is sample data
 const data = {
   user: {
     name: "Rishab",
     email: "rishab@gmail.com",
-    avatar: "/user2.png"
-
+    avatar: "/user2.png",
   },
   navMain: [
     {
@@ -35,7 +40,7 @@ const data = {
     {
       title: "Workflows",
       url: "workflows",
-      icon: Layers2Icon,
+      icon: WorkflowIcon,
       isActive: false,
     },
     {
@@ -51,14 +56,13 @@ const data = {
       isActive: false,
     },
   ],
- 
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const { setOpen } = useSidebar()
+  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+  const { setOpen } = useSidebar();
 
   return (
     <Sidebar
@@ -82,8 +86,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <Workflow className="size-5" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Workflow automator</span>
-                    <span className="truncate text-xs">Your best workflow automation tool</span>
+                    <span className="truncate font-semibold">
+                      Workflow automator
+                    </span>
+                    <span className="truncate text-xs">
+                      Your best workflow automation tool
+                    </span>
                   </div>
                 </a>
               </SidebarMenuButton>
@@ -102,14 +110,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         hidden: false,
                       }}
                       onClick={() => {
-                        setActiveItem(item)                        
-                        setOpen(true)
+                        setActiveItem(item);
+                        setOpen(true);
                       }}
                       isActive={activeItem.title === item.title}
-                      className="px-2.5 md:px-2"
+                      
                     >
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <Link href={item.url} className="flex md:2.5  items-center justify-center gap-2">
+                        <item.icon size={18} />
+                        <span>{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -130,20 +140,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div className="text-base font-medium text-foreground">
               {activeItem.title}
             </div>
-            
           </div>
-          
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup className="px-0">
             <SidebarGroupContent>
-              <div>
-              yaha content aayega 
-              </div>
+              <div>yaha content aayega</div>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
     </Sidebar>
-  )
+  );
 }

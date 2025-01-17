@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
+import AppProvider from "@/components/provider/AppProvider";
+
 
 
 export const metadata: Metadata = {
@@ -10,13 +13,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <ClerkProvider afterSignOutUrl={"/sign-in"}>
-      <html lang="en">
-        <body>{children}</body>
+    <ClerkProvider afterSignOutUrl="/sign-in">
+      <html lang="en" suppressHydrationWarning>
+        <body>
+          <AppProvider>
+            <main>
+              {children}
+              <Toaster />
+            </main>
+          </AppProvider>
+        </body>
       </html>
     </ClerkProvider>
   );

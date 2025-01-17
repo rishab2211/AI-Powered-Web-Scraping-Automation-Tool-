@@ -1,12 +1,8 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { SquarePen } from "lucide-react";
+import { Loader2, SquarePen } from "lucide-react";
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,29 +17,39 @@ import {
   FormLabel,
   FormControl,
   FormDescription,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createWorkflow } from "@/actions/CreateWorkflow";
+import { createWorkflow } from "@/actions/createWorkflow";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { waitFor } from "@/lib/helper";
+import { useRouter } from "next/navigation";
+
 
 const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<createWorkflowSchemaType>({
     resolver: zodResolver(createWorkflowSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: "",
+      description: "",
+    },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: createWorkflow,
-    onSuccess: () => {
+    onSuccess: (workflow) => {
+      router.push(`/workflow/editor/${workflow.id}`) // redirection
       toast.success("Workflow created", { id: "create-workflow" });
       form.reset(); // Reset form fields on success
-      setOpen(false); // Close dialog on success
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("this is the rror occuring : "+error);
+      
       toast.error("Failed to create a workflow", { id: "create-workflow" });
     },
   });
@@ -57,11 +63,14 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(open)=>{
+      form.reset();
+      setOpen(open);
+    }}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="flex">
           <SquarePen />
-          {triggerText ?? "Create Workflow"}
+{triggerText ?? "Create Workflow"}
         </Button>
       </DialogTrigger>
       <DialogContent className="px-0">
@@ -71,9 +80,12 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
           subTitle="Start building your workflows"
         />
 
-        <div className="p-6">
+        <div className="p-6 h-full">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 w-full"
+            >
               {/* Workflow Name Field */}
               <FormField
                 name="name"
@@ -90,6 +102,7 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
                     <FormDescription>
                       Choose a descriptive and unique name.
                     </FormDescription>
+                    <FormMessage/>
                   </FormItem>
                 )}
               />
@@ -117,7 +130,8 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
 
               {/* Submit Button */}
               <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? "Creating..." : "Proceed"}
+                {!isPending && "Proceed" }
+                {isPending && <Loader2 className="animate-spin" />}
               </Button>
             </form>
           </Form>

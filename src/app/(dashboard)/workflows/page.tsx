@@ -6,7 +6,7 @@ import { UserWorkflowSkeleton } from "./_components/UserWorkflowSkeleton";
 
 export default function Page() {
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex-1 w-full flex flex-col h-full">
       {/* Header Section */}
       <div className="flex justify-between">
         <div className="flex flex-col">

@@ -1,7 +1,8 @@
-import { GetWorkflowsOfUser } from "@/actions/GetWorkflowsOfUser";
+import { GetWorkflowsOfUser } from "@/actions/getWorkflowsOfUser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, WorkflowIcon } from "lucide-react";
 import CreateWorkflowDialog from "./CreateWorkflowDialog";
+import WorkflowCard from "./WorkflowCard";
 
 export async function UserWorkflows() {
   const workflows = await GetWorkflowsOfUser();
@@ -38,7 +39,7 @@ export async function UserWorkflows() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {workflows.map((workflow) => (
-        <div key={workflow.id}>{/* Workflow card content */}</div>
+        <WorkflowCard workflow={workflow} key={workflow.id}></WorkflowCard>
       ))}
     </div>
   );

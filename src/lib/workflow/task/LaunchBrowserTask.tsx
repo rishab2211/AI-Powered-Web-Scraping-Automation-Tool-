@@ -1,12 +1,18 @@
-import { TaskType } from "@/app/types/tasks";
+import { TaskParamType, TaskType } from "@/app/types/tasks";
 import { GlobeIcon, LucideProps } from "lucide-react";
 
-export const LaunchBrowserTasksDetails = {
+export const LaunchBrowserTask = {
   type: TaskType.LAUNCH_BROWSER,
   label: "Lanuch Browser",
-  icon: (props: LucideProps) => (<GlobeIcon className=" stroke-blue-400 " {...props} />),
-  isEntryPoint : true,
+  icon: (props: LucideProps) => (
+    <GlobeIcon className=" stroke-blue-400 " {...props} />
+  ),
+  isEntryPoint: true,
+  inputs : [{
+    name: "Website URL",
+    type : TaskParamType.STRING,
+    helperText : "eg: https://google.com",
+    required : true,
+    hideHandle : true
+  }]
 };
-const LaunchBrowserTask = () => {};
-
-export default LaunchBrowserTask;

@@ -11,32 +11,34 @@ const NodeCard = ({
   children: React.ReactNode;
   isSelected: boolean;
 }) => {
+  const { getNode, setCenter } = useReactFlow();
 
-    const {getNode,setCenter} = useReactFlow();
+  const positionNode = () => {
+    const node = getNode(nodeId);
+    if (!node) return;
+
+    const { position, measured } = node;
+    if (!position || !measured) return;
+
+    const { width, height } = measured;
+    const x = position.x + width! / 2;
+    const y = position.y + height! / 2;
+
+    if (!x || !y) return;
+
+    setCenter(x, y, {
+      zoom: 1,
+      duration: 500,
+    });
+  };
 
   return (
     <div
-    onDoubleClick={()=>{
-        const node = getNode(nodeId);
-        if(!node) return;
-
-        const {position, measured} = node;
-        if(!position || !measured) return;
-
-        const {width, height} = measured;
-        const x = position.x + width!/2;
-        const y = position.y + height!/2;
-
-        if(!x || !y) return;
-
-        setCenter(x,y,{
-            zoom :1,
-            duration :500
-        })
-    }}
+      onDoubleClick={positionNode}
       className={cn(
-        "rounded  cursor-pointer bg-background border-2 border-separate w-[300px] text-smgap-1 flex flex-col ",
-      isSelected && "border-primary")}
+        "rounded  cursor-pointer bg-background border-2 border-separate w-fit text-smgap-1 flex flex-col ",
+        isSelected && "border-primary"
+      )}
     >
       {children}
     </div>

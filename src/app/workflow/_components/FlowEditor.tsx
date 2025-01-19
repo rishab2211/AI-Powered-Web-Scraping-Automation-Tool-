@@ -19,6 +19,8 @@ const nodeTypes = {
     Node : NodeComponent
 }
 
+const snapGrid: [number, number] = [1,1]
+
 
 const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([
@@ -34,6 +36,9 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          snapToGrid={true}
+          snapGrid={snapGrid}
+        
         >
           <Controls position="top-left" className="bg-pink" />
           <Background variant={BackgroundVariant.Dots} />

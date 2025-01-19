@@ -12,6 +12,7 @@ export function CreateFlowNode(
         data :{
             type : nodeType,
             inputs : {}
-        }
+        },
+        dragHandle : ".drag-handle"
     })
 }

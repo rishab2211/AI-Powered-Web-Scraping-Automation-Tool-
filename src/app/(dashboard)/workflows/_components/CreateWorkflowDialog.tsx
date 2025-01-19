@@ -42,8 +42,8 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: createWorkflow,
-    onSuccess: (workflow) => {
-      router.push(`/workflow/editor/${workflow.id}`) // redirection
+    onSuccess: () => {
+      
       toast.success("Workflow created", { id: "create-workflow" });
       form.reset(); // Reset form fields on success
     },

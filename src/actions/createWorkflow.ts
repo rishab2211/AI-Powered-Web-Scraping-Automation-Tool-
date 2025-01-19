@@ -34,5 +34,5 @@ export async function createWorkflow(form: createWorkflowSchemaType) {
 
     console.log(result);
     
-    return result;
+    redirect(`/workflow/editor/${result.id}`)
 }

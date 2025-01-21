@@ -7,13 +7,15 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import Link from "next/link";
+import SaveBtn from "./SaveBtn";
 
 interface Props {
   title: string;
   subtitle?: string;
+  workflowId : string
 }
 
-const Topbar = ({ title, subtitle }: Props) => {
+const Topbar = ({ title, subtitle,workflowId }: Props) => {
   return (
     <header className=" flex p-2 border-b-2 border-separate justify-between w-full  h-[60px] sticky top-0 bg-background ">
       <div className="flex gap-5 items-center flex-1 ">
@@ -28,14 +30,11 @@ const Topbar = ({ title, subtitle }: Props) => {
         <div>
           <p className=" font-bold text-ellipsis text-xl truncate ">{title}</p>
           {subtitle && (
-            <p className=" text-xs text-ellipsis ml-6 truncate">{subtitle}</p>
+            <p className=" text-xs text-ellipsis ml-0.5 truncate">{subtitle}</p>
           )}
         </div>
       </div>
-      <Button className="hover:shadow-xl  ">
-        <CheckIcon />
-        Save
-      </Button>
+      <SaveBtn workflowId={workflowId} />
     </header>
   );
 };

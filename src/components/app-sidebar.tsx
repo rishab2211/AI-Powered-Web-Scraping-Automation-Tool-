@@ -145,7 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarContent>
           <SidebarGroup className="px-0">
             <SidebarGroupContent>
-              <div>yaha content aayega</div>
+              
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>

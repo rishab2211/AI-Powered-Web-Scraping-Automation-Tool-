@@ -17,7 +17,7 @@ const NodeComponent = memo((props:NodeProps)=>{
         <NodeHeader taskType ={nodeData.type}/>
         <NodeInputs>
             {task.inputs.map((input,index)=>(
-                <NodeInput input={input} key={index}/>
+                <NodeInput input={input} nodeId={props.id} key={index}/>
             ))}
         </NodeInputs>
     </NodeCard>

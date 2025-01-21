@@ -7,7 +7,7 @@ export function CreateFlowNode(
 ): CustomNode{
     return({
         id : crypto.randomUUID(),
-        position:position ?? {x:0, y:0},
+        position:position ?? {x:50, y:50},
         type:"Node",
         data :{
             type : nodeType,

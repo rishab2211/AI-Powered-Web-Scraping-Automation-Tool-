@@ -15,7 +15,7 @@ const NodeHeader = ({taskType}:{taskType : TaskType}) => {
   return (
     <div className=' flex items-center gap-2 p-2 '>
         <task.icon size={16} />
-        <div className=' flex justify-between items-center w-full '>
+        <div className=' flex gap-4 justify-between items-center w-full '>
             <p className=' text-xs font-bold uppercase text-muted-foreground ' >
                 {task.label}
             </p>

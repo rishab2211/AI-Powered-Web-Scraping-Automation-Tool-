@@ -1,3 +1,4 @@
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useReactFlow } from "@xyflow/react";
 import React from "react";
@@ -41,6 +42,7 @@ const NodeCard = ({
       )}
     >
       {children}
+      <Separator/>
     </div>
   );
 };

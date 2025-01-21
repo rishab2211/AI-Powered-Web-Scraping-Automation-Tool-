@@ -9,11 +9,12 @@ import {
   useNodesState,
   useReactFlow,
 } from "@xyflow/react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import "@xyflow/react/dist/style.css";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/app/types/tasks";
 import NodeComponent from "./nodes/NodeComponent";
+import { CustomNode } from "@/app/types/appNode";
 
 const nodeTypes = {
   Node: NodeComponent,
@@ -22,9 +23,9 @@ const nodeTypes = {
 const snapGrid: [number, number] = [1, 1];
 
 const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { setViewport } = useReactFlow();
+  const { setViewport, screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
     try {
@@ -40,9 +41,31 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setViewport({ x, y, zoom });
     } catch (err) {
-
+      console.log(err);
+      
     }
   }, [workflow.definition,setEdges,setNodes,setViewport]);
+
+
+  const onDragOver = useCallback((event : React.DragEvent)=>{
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  },[])
+
+  const onDrop = useCallback((event : React.DragEvent)=>{
+    event.preventDefault();
+    const taskType = event.dataTransfer.getData("application/reactflow");
+    
+    if(typeof taskType === undefined || !taskType) return;
+
+    const position = screenToFlowPosition({
+      x : event.clientX,
+      y : event.clientY
+    })
+
+    const newNode = CreateFlowNode(taskType as TaskType, position);
+    setNodes(nds=>nds.concat(newNode))
+  },[])
 
   return (
     <div className="h-screen w-screen ">
@@ -55,8 +78,10 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
           nodeTypes={nodeTypes}
           snapToGrid={true}
           snapGrid={snapGrid}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         >
-          <Controls position="top-left" className="bg-pink" />
+          <Controls position="top-left" className="" />
           <Background variant={BackgroundVariant.Dots} />
         </ReactFlow>
       </main>

@@ -13,7 +13,7 @@ const TooltipWrapper = (props: Props) => {
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>{props.children}</TooltipTrigger>
-        <TooltipContent side={props.side}>{props.content}</TooltipContent>
+        <TooltipContent className="relative bg-primary text-secondary p-1 rounded " side={props.side}>{props.content}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

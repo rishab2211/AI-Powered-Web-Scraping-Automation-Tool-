@@ -51,7 +51,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
               >
                 {workflow.name}
               </Link>
-              <span className=" ml-2  px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
+              <span className=" ml-2 flex justify-center px-1 py-0.5 items-center  text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
                 DRAFT
               </span>
             </h3>

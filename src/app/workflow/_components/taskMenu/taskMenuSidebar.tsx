@@ -26,6 +26,7 @@ export function TaskmenuSidebar() {
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col px-2 gap-1">
                     <TaskmenuBtn taskType={TaskType.PAGE_TO_HTML} />
+                    <TaskmenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
                 </AccordionContent>
             </AccordionItem>
 

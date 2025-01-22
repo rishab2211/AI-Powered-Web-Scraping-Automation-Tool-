@@ -8,7 +8,7 @@ import React, { useId, useState } from 'react'
 
 
 
-const BrowserInstanceParam = ({param, value, updateNodeParamValue}: ParamProps) => {
+const BrowserInstanceParam = ({param}: ParamProps) => {
     
     const id = useId();
   return (

@@ -16,5 +16,6 @@ export interface CustomNode extends Node{
 export interface ParamProps{
     param : TaskParam,
     value : string,
-    updateNodeParamValue : (newValue:string)=>void
+    updateNodeParamValue : (newValue:string)=>void,
+    disabled ?: boolean
 }

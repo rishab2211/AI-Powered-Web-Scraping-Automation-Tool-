@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button'
 import {TaskRegistry} from '@/lib/workflow/task/Registry'
 import { CoinsIcon, GripVertical } from 'lucide-react'
 import React from 'react'
+import DeleteWorkflowCardBtn from './DeleteWorkflowCardBtn'
+import CopyWorkflowCardBtn from './CopyWorkflowCard'
 
-const NodeHeader = ({taskType}:{taskType : TaskType}) => {
+const NodeHeader = ({taskType, nodeId}:{taskType : TaskType,nodeId : string}) => {
 
     const task = TaskRegistry[taskType];
 
@@ -25,6 +27,13 @@ const NodeHeader = ({taskType}:{taskType : TaskType}) => {
                     <CoinsIcon size={16} />
                     TODO
                 </Badge>
+                {!task.isEntryPoint && (
+                    <DeleteWorkflowCardBtn nodeId={nodeId}/>
+                    
+                )}
+                {!task.isEntryPoint && (
+                    <CopyWorkflowCardBtn nodeId={nodeId}/>
+                )}
                 <Button className='drag-handle cursor-grab' size={"icon"} variant={"ghost"}>
                      <GripVertical size={16} />
                 </Button>

@@ -42,13 +42,15 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: createWorkflow,
-    onSuccess: () => {
-      
+    onSuccess: (workflowId) => {
       toast.success("Workflow created", { id: "create-workflow" });
-      form.reset(); // Reset form fields on success
+      form.reset();
+      setOpen(false);
+      // Navigate programmatically after success
+      router.push(`/workflow/editor/${workflowId}`);
     },
     onError: (error) => {
-      console.log("this is the rror occuring : "+error);
+      console.log(error);
       
       toast.error("Failed to create a workflow", { id: "create-workflow" });
     },

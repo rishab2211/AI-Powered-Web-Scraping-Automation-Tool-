@@ -14,20 +14,20 @@ const NodeComponent = memo((props:NodeProps)=>{
 
     const task = TaskRegistry[nodeData.type];
 
-    return <NodeCard nodeId={props.id} isSelected={!!props.selected} >
+    return (<NodeCard nodeId={props.id} isSelected={!!props.selected} >
         <NodeHeader taskType ={nodeData.type}/>
         <NodeInputs>
-            {task.inputs.map((input,index)=>(
-                <NodeInput input={input} nodeId={props.id} key={index}/>
+            {task.inputs.map((input)=>(
+                <NodeInput input={input} nodeId={props.id} key={input.name}/>
             ))}
         </NodeInputs>
 
         <NodeOutputs>
-            {task.outputs.map((output,index)=>(
-                <NodeOutput output={output}  key={index}/>
+            {task.outputs.map((output)=>(
+                <NodeOutput output={output} key={output.name}   />
             ))}
         </NodeOutputs>
-    </NodeCard>
+    </NodeCard>)
 })
 
 export default NodeComponent;

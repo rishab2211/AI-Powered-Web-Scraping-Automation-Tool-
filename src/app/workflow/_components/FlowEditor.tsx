@@ -1,9 +1,12 @@
 "use client";
 import { Workflow } from "@prisma/client";
 import {
+  addEdge,
   Background,
   BackgroundVariant,
+  Connection,
   Controls,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -15,16 +18,21 @@ import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/app/types/tasks";
 import NodeComponent from "./nodes/NodeComponent";
 import { CustomNode } from "@/app/types/appNode";
+import DeletableEdge from "./edges/DeletableEdge";
 
 const nodeTypes = {
   Node: NodeComponent,
 };
 
+const edgeTypes = {
+  default : DeletableEdge
+}
+
 const snapGrid: [number, number] = [1, 1];
 
 const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState <Edge>([]);
   const { setViewport, screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
@@ -67,6 +75,12 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
     setNodes(nds=>nds.concat(newNode))
   },[])
 
+  const onConnect = useCallback((connection : Connection)=>{
+    console.dir(connection,{depth : null});
+    setEdges(eds=> addEdge({...connection, animated: true},eds))
+    
+  },[])
+
   return (
     <div className="h-screen w-screen ">
       <main className=" h-full w-full ">
@@ -76,10 +90,12 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           snapToGrid={true}
           snapGrid={snapGrid}
           onDragOver={onDragOver}
           onDrop={onDrop}
+          onConnect={onConnect}
         >
           <Controls position="top-left" className="" />
           <Background variant={BackgroundVariant.Dots} />

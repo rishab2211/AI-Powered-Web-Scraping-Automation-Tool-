@@ -1,3 +1,4 @@
-#Workflow automator : automates your tasks for you
+# Workflow automator
+## automates your tasks for you
 
-(This project is currently in the development phase).
+# (This project is currently in the development phase).

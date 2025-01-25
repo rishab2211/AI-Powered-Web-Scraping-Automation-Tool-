@@ -23,9 +23,9 @@ const NodeHeader = ({taskType, nodeId}:{taskType : TaskType,nodeId : string}) =>
             </p>
             <div className='flex items-center gap-2'>
                 {task.isEntryPoint && <Badge>Entry point</Badge>}
-                <Badge className='w-fit flex justify-center items-center text-xs ' >
+                <Badge className='w-fit flex gap-1 justify-center items-center text-xs ' >
                     <CoinsIcon size={16} />
-                    TODO
+                    {task.credits}
                 </Badge>
                 {!task.isEntryPoint && (
                     <DeleteWorkflowCardBtn nodeId={nodeId}/>

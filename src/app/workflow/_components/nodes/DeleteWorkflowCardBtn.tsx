@@ -10,7 +10,7 @@ const DeleteWorkflowCardBtn = ({nodeId} : {nodeId : string}) => {
   return (
     <div><TooltipProvider>
     <Tooltip>
-    <TooltipTrigger>
+    <TooltipTrigger asChild>
     <Button variant={"ghost"} size={"icon"} className=' hover:shadow-md' onClick={()=>{
       deleteElements({
         nodes :[{id : nodeId}]

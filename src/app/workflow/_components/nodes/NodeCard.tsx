@@ -1,3 +1,4 @@
+import useFlowValidation from "@/components/hooks/useFlowValidation";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useReactFlow } from "@xyflow/react";
@@ -13,6 +14,8 @@ const NodeCard = ({
   isSelected: boolean;
 }) => {
   const { getNode, setCenter } = useReactFlow();
+  const {invalidInputs} = useFlowValidation();
+  const hasInvalidInputs = invalidInputs.some(node=>node.nodeId===nodeId)
 
   const positionNode = () => {
     const node = getNode(nodeId);
@@ -38,7 +41,8 @@ const NodeCard = ({
       onDoubleClick={positionNode}
       className={cn(
         "rounded  cursor-pointer bg-background border-2 border-separate w-fit text-smgap-1 flex flex-col ",
-        isSelected && "border-primary"
+        isSelected && "border-primary",
+        hasInvalidInputs && "border-destructive border-2"
       )}
     >
       {children}

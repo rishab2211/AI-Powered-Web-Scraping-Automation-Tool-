@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import SaveBtn from "./SaveBtn";
+import ExecuteBtn from "./ExecuteBtn";
 
 interface Props {
   title: string;
@@ -34,7 +35,10 @@ const Topbar = ({ title, subtitle,workflowId }: Props) => {
           )}
         </div>
       </div>
+      <div className="flex gap-3">
+      <ExecuteBtn workflowId={workflowId}/>
       <SaveBtn workflowId={workflowId} />
+      </div>
     </header>
   );
 };

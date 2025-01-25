@@ -2,8 +2,12 @@ import React from 'react'
 import { LaunchBrowserTask } from './LaunchBrowserTask'
 import { PageToHtmlTask } from './PageToHtml'
 import { ExtractTextFromElement } from './ExtractTextFromElement'
+import { TaskType } from '@/app/types/tasks'
+import { WorkflowTask } from '@/app/types/Workflows'
 
-
+type Registry = {
+    [k in TaskType] : WorkflowTask
+}
 
 
 export const TaskRegistry={

@@ -88,6 +88,6 @@ export async function RunWorkflow(form:{
         throw new Error("Workflow execution not created");
     }
 
-    redirect(`/workflows/runs/${workflowId}/${execution.id}`)
+    redirect(`/workflow/runs/${workflowId}/${execution.id}`)
 
 }   

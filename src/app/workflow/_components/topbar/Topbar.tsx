@@ -13,10 +13,16 @@ import ExecuteBtn from "./ExecuteBtn";
 interface Props {
   title: string;
   subtitle?: string;
-  workflowId : string
+  workflowId: string;
+  hideButtons?: boolean;
 }
 
-const Topbar = ({ title, subtitle,workflowId }: Props) => {
+const Topbar = ({
+  title,
+  subtitle,
+  workflowId,
+  hideButtons = false,
+}: Props) => {
   return (
     <header className=" flex p-2 border-b-2 border-separate justify-between w-full  h-[60px] sticky top-0 bg-background ">
       <div className="flex gap-5 items-center flex-1 ">
@@ -36,8 +42,12 @@ const Topbar = ({ title, subtitle,workflowId }: Props) => {
         </div>
       </div>
       <div className="flex gap-3">
-      <ExecuteBtn workflowId={workflowId}/>
-      <SaveBtn workflowId={workflowId} />
+        {!hideButtons && (
+          <>
+            <ExecuteBtn workflowId={workflowId} />
+            <SaveBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
 import { CustomNode, CustomNodeMissingInputs } from "@/app/types/appNode";
 import { WorkflowExecutionPlan, WorkflowExecutionPlanPhase } from "@/app/types/Workflows";
-import { Edge, getIncomers } from "@xyflow/react";
+import { Edge } from "@xyflow/react";
 import { TaskRegistry } from "./task/Registry";
 
 export enum FlowToExecutionPlanValidationError  {
@@ -147,4 +147,22 @@ function getInvalidInputs(node: CustomNode, edges: Edge[], planned: Set<string>)
 
     }
     return invalidInputs;
+}
+
+
+function getIncomers(node : CustomNode, nodes : CustomNode[], edges : Edge[]){
+    if(!node.id){
+        return [];
+    }
+
+    const incomersIds = new Set();
+
+    edges.forEach((edge)=>{
+        if(edge.target===node.id){
+            incomersIds.add(edge.source);
+        }
+    })
+
+    return nodes.filter(n=> incomersIds.has(n.id))
+
 }

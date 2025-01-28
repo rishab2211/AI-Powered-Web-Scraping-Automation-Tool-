@@ -54,7 +54,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   
 
   return (
-    <div className="h-full w-full flex ">
+    <div className="h-full w-full flex ml-2 mt-7 ">
       {/* <SidebarProvider>
         <RunExecutionSidebar initialData={initialData} />
         <SidebarTrigger className="relative" />

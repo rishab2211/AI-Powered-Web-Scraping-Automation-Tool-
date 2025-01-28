@@ -36,8 +36,10 @@ const layout = async ({
       />
       <SidebarProvider>
         <RunExecutionSidebar initialData={workflowExecution} />
-        <SidebarTrigger className="" />
-        <main>{children}</main>
+        
+        <main>
+        <SidebarTrigger className=" fixed bg-background" />
+          {children}</main>
       </SidebarProvider>
     </div>
   );

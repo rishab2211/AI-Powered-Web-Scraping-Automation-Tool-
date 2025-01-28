@@ -30,14 +30,7 @@ export default async function ExecutionViewerPage({
   }
 
   return (
-    <div className="h-screen w-full flex flex-col">
-      <Topbar
-        workflowId={workflowId}
-        title="workflow run details"
-        subtitle={`Run ID : ${executionId}`}
-        hideButtons={true}
-      />
-
+    <div className="h-full w-full flex flex-col">
       <Suspense fallback={<Loader2Icon className='"h-10 w-10 animate-spin ' />}>
         <ExecutionViewerPageWrapper executionId={executionId} />
       </Suspense>

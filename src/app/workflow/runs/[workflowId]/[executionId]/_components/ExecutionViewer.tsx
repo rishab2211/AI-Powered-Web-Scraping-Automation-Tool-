@@ -34,25 +34,31 @@ import { RunExecutionSidebar } from "./RunExecutionSidebar";
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
 const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
-  const query = useQuery({
-    queryKey: ["execution", initialData?.id],
-    initialData,
-    queryFn: () => GetWorkflowExecutionWithPhases(initialData!.id),
-    refetchInterval: (q) =>
-      q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
-  });
+  // const query = useQuery({
+  //   queryKey: ["execution", initialData?.id],
+  //   initialData,
+  //   queryFn: () => GetWorkflowExecutionWithPhases(initialData!.id),
+  //   refetchInterval: (q) =>
+  //     q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
+  // });
 
-  const duration = DatesToDurationString(
-    query?.data?.completedAt,
-    query?.data?.startedAt
-  );
+  // const duration = DatesToDurationString(
+  //   query?.data?.completedAt,
+  //   query?.data?.startedAt
+  // );
+
+  
+  // console.log("in the execution viewer");
+  
+  // console.dir(initialData,{depth : null});
+  
 
   return (
     <div className="h-full w-full flex ">
-      <SidebarProvider>
+      {/* <SidebarProvider>
         <RunExecutionSidebar initialData={initialData} />
         <SidebarTrigger className="relative" />
-      </SidebarProvider>
+      </SidebarProvider> */}
       <main>
         <div>hello</div>
       </main>

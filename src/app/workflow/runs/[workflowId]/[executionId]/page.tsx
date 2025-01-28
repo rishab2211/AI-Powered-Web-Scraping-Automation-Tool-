@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Loader2Icon } from "lucide-react";
 import React, { Suspense } from "react";
 import ExecutionViewer from "./_components/ExecutionViewer";
+import NotFound from "@/app/not-found";
 
 export default async function ExecutionViewerPage({
   params,
@@ -51,7 +52,9 @@ async function ExecutionViewerPageWrapper({
   const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
 
   if (!workflowExecution) {
-    return <div>workflow execution not found</div>;
+    return <div className=" h-full w-full flex justify-center items-center">
+      <NotFound/>
+    </div>;
   }
   return <ExecutionViewer initialData={workflowExecution} />;
 }

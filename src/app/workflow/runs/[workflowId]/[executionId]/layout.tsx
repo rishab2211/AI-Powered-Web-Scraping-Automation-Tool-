@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { RunExecutionSidebar } from "./_components/RunExecutionSidebar";
 import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
+import NotFound from "@/app/not-found";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 const layout = async ({
@@ -21,6 +22,9 @@ const layout = async ({
   const { executionId } = await params;
 
   const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
+  if(!workflowExecution){
+    return <NotFound/>
+  }
 
   return (
     <div className="  w-full flex flex-col">

@@ -27,12 +27,13 @@ const layout = async ({
   }
 
   return (
-    <div className="  w-full flex flex-col">
+    <div className="  w-full flex  flex-col">
       <Topbar
         workflowId={workflowId}
         title="workflow run details"
         subtitle={`Run ID : ${executionId}`}
         hideButtons={true}
+        
       />
       <SidebarProvider>
         <RunExecutionSidebar initialData={workflowExecution} />

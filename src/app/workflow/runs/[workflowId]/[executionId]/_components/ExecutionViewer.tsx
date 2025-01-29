@@ -30,6 +30,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { DatesToDurationString } from "@/lib/helper";
 import { RunExecutionSidebar } from "./RunExecutionSidebar";
+import { useSearchParams } from "next/navigation";
+import { GetWorkflowPhaseDetails } from "@/actions/getPhaseDetails";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -42,50 +44,30 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   //     q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
   // });
 
-  // const duration = DatesToDurationString(
-  //   query?.data?.completedAt,
-  //   query?.data?.startedAt
+  
+
+  const searchParams = useSearchParams();
+  const selectedPhase = searchParams.get("phase");
+  // const selectedPhase = initialData?.phases.find(
+  //   (phase) => phase.id === selectedPhaseId
   // );
 
-  
-  // console.log("in the execution viewer");
-  
-  // console.dir(initialData,{depth : null});
-  
+  const phaseDetails= useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled : selectedPhase !== null,
+    queryFn: () => {
+      if (!selectedPhase) {
+        throw new Error("No phase selected");
+      }
+      return GetWorkflowPhaseDetails(selectedPhase);
+    }
+  })
 
   return (
-    <div className="h-full w-full flex ml-2 mt-7 ">
-      {/* <SidebarProvider>
-        <RunExecutionSidebar initialData={initialData} />
-        <SidebarTrigger className="relative" />
-      </SidebarProvider> */}
-      <main>
-        <div>hello</div>
-      </main>
+    <div className="h-full w-full flex  ml-2 mt-7 ">
+      <pre>{JSON.stringify(phaseDetails.data, null, 4)}</pre>
     </div>
   );
 };
 
 export default ExecutionViewer;
-
-export function ExecutionLabel({
-  icon,
-  label,
-  value,
-}: {
-  icon: LucideIcon;
-  label: React.ReactNode;
-  value: React.ReactNode;
-}) {
-  const Icon = icon;
-
-  return (
-    <SidebarMenuButton className="flex justify-between p-2 my-0.5">
-      <div className="flex items-center gap-1">
-        <Icon size={15} />
-        <span>{label}</span>
-      </div>
-      <div>{value}</div>
-    </SidebarMenuButton>
-  );
-}

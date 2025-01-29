@@ -25,7 +25,7 @@ const Topbar = ({
 }: Props) => {
   return (
     <header className=" flex p-2 border-b-2 border-separate justify-between w-full  h-[60px] sticky top-0 bg-background ">
-      <div className="flex gap-5 items-center flex-1 ">
+      <div className="flex fixed gap-5 items-center flex-1 ">
         <TooltipWrapper side="right" content="go to workflows">
           <Link
             href={"/workflows"}

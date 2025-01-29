@@ -19,10 +19,11 @@ const ExecuteBtn = ({ workflowId }: { workflowId: string }) => {
       toast.success("Execution started", { id: "flow-execution" });
     },
     onError: () => {
-      toast.error("Something went wrong", { id: "flow-execution" });
+      toast.error("Error occured while starting workflow", { id: "flow-execution" });
     },
   });
 
+  const isValid = nodes.length > 0;
 
   return (
     <Button
@@ -36,12 +37,18 @@ const ExecuteBtn = ({ workflowId }: { workflowId: string }) => {
           return;
         };
 
+        if(!isValid){
+          toast.error("Add nodes before executing");
+          return;
+        }
         mutation.mutate({
           workflowId : workflowId,
-          flowDefinition : JSON.stringify(toObject())
+          flowDefinition : JSON.stringify({nodes, edges})
         })
 
       }}
+      
+      
     >
       <PlayIcon />
       Execute

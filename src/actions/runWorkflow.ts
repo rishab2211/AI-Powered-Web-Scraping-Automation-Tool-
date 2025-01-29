@@ -2,6 +2,7 @@
 
 import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, WorkflowExecutionTrigger } from "@/app/types/Workflows";
 import prisma from "@/lib/prisma";
+import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
 import { FlowToExecutionPlan } from "@/lib/workflow/FlowToExecutionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/Registry";
 import { auth } from "@clerk/nextjs/server";
@@ -11,6 +12,9 @@ export async function RunWorkflow(form:{
     workflowId : string;
     flowDefinition : string;
 }) {
+
+    console.log("inside runWorkflow");
+    
     
     const {userId} =  await auth();
 
@@ -18,7 +22,14 @@ export async function RunWorkflow(form:{
         throw new Error("unauthenticated");
     }
 
+    
+    
+
     const {workflowId, flowDefinition} = form;
+
+    
+    
+   
 
     if(!workflowId){
         throw new Error("Workflow ID is required");
@@ -42,6 +53,9 @@ export async function RunWorkflow(form:{
     }
 
     const flow = JSON.parse(flowDefinition);
+    if (!flow || !Array.isArray(flow.nodes) || !Array.isArray(flow.edges)) {
+        throw new Error("Invalid flow structure");
+      }
     const result = FlowToExecutionPlan(flow.nodes, flow.edges);
 
     if(result.error){
@@ -88,6 +102,8 @@ export async function RunWorkflow(form:{
         throw new Error("Workflow execution not created");
     }
 
+    ExecuteWorkflow(execution.id); // run this on background
+    
     redirect(`/workflow/runs/${workflowId}/${execution.id}`)
 
 }   

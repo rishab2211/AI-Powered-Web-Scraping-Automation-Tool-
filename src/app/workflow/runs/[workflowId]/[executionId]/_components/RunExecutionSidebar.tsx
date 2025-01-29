@@ -56,7 +56,7 @@ export function RunExecutionSidebar({
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedPhase = searchParams.get("phase");
+  const selectedPhase = searchParams.get("phase") || null;
 
   const handlePhaseSelect = (phaseId: string) => {
     const params = new URLSearchParams(searchParams);

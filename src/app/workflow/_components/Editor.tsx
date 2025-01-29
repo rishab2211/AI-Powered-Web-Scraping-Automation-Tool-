@@ -17,6 +17,7 @@ const Editor = ({ workflow }: { workflow: Workflow }) => {
               title="Workflow Editor"
               subtitle={workflow.name}
               workflowId={workflow.id}
+              className="relative"
             />
             <section>
               <SidebarProvider>

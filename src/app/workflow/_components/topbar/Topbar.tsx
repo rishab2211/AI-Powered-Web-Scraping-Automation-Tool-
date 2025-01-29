@@ -9,12 +9,14 @@ import {
 import Link from "next/link";
 import SaveBtn from "./SaveBtn";
 import ExecuteBtn from "./ExecuteBtn";
+import { cn } from "@/lib/utils";
 
 interface Props {
   title: string;
   subtitle?: string;
   workflowId: string;
   hideButtons?: boolean;
+  className?:string;
 }
 
 const Topbar = ({
@@ -22,10 +24,11 @@ const Topbar = ({
   subtitle,
   workflowId,
   hideButtons = false,
+  className
 }: Props) => {
   return (
     <header className=" flex p-2 border-b-2 border-separate justify-between w-full  h-[60px] sticky top-0 bg-background ">
-      <div className="flex fixed gap-5 items-center flex-1 ">
+      <div className={cn("flex fixed gap-5 items-center flex-1 ", className)}>
         <TooltipWrapper side="right" content="go to workflows">
           <Link
             href={"/workflows"}

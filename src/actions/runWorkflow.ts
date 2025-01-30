@@ -1,5 +1,6 @@
 "use server"
 
+import { CustomNode } from "@/app/types/appNode";
 import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, WorkflowExecutionTrigger } from "@/app/types/Workflows";
 import prisma from "@/lib/prisma";
 import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
@@ -56,7 +57,7 @@ export async function RunWorkflow(form:{
     if (!flow || !Array.isArray(flow.nodes) || !Array.isArray(flow.edges)) {
         throw new Error("Invalid flow structure");
       }
-    const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+    const result = FlowToExecutionPlan(flow.nodes as CustomNode[], flow.edges);
 
     if(result.error){
         throw new Error("Flow definition not valid");

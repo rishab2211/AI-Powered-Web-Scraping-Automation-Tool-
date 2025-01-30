@@ -3,6 +3,9 @@ import prisma from "../prisma";
 import { revalidatePath } from "next/cache";
 import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/app/types/Workflows";
 import { waitFor } from "../helper";
+import { ExecutionPhase } from "@prisma/client";
+import { CustomNode } from "@/app/types/appNode";
+import { TaskRegistry } from "./task/Registry";
 
 export async function ExecuteWorkflow(executionId: string) {
 
@@ -52,8 +55,15 @@ export async function ExecuteWorkflow(executionId: string) {
     let creditsConsumed = 0;
     let executionFailed = false;
     for (const phase of execution.phases) {
-        await waitFor(3000);
-        // TODO : execute phase
+        // await waitFor(3000);
+        // execute phase
+
+        const phaseExecution = await executeWorkflowPhase(phase);
+
+        if(!phaseExecution.success){
+            executionFailed = true;
+            break;
+        }
     }
 
     // finalize execution
@@ -136,4 +146,52 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
     })
 
 
+}
+
+
+async function executeWorkflowPhase(phase: ExecutionPhase) {
+    const startedAt = new Date();
+
+    const node = JSON.parse(phase.node) as CustomNode;
+
+    await prisma.executionPhase.update({
+        where : {
+            id : phase.id
+        },
+        data : {
+            status : ExecutionPhaseStatus.RUNNING,
+            startedAt
+        }
+    });
+
+    const creditsRequired = TaskRegistry[node.data.type].credits;
+
+    console.log(`Executing phase ${phase.name} with ${creditsRequired} credtis required`);
+
+
+    // TODO : decrement  user balance (with required credits)
+    
+    await waitFor(2000);
+
+    const success  = Math.random() < 0.7;
+
+    await finalizePhase(phase.id, success);
+
+    return {success};
+}
+
+
+async function finalizePhase(phaseId : string, success : boolean) {
+    
+    const finalStatus = success ? ExecutionPhaseStatus.COMPLETED: ExecutionPhaseStatus.FAILED;
+
+    await prisma.executionPhase.update({
+        where : {
+            id : phaseId
+        },
+        data : {
+            status : finalStatus,
+            completedAt : new Date()
+        }
+    })
 }

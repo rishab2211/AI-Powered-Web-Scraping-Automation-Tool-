@@ -19,7 +19,7 @@ const ExecuteBtn = ({ workflowId }: { workflowId: string }) => {
       toast.success("Execution started", { id: "flow-execution" });
     },
     onError: () => {
-      toast.error("Error occured while starting workflow", { id: "flow-execution" });
+      toast.error("Some error occured while starting workflow", { id: "flow-execution" });
     },
   });
 

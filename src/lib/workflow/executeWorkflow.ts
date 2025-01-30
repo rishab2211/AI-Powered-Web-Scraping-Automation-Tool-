@@ -6,6 +6,8 @@ import { waitFor } from "../helper";
 import { ExecutionPhase } from "@prisma/client";
 import { CustomNode } from "@/app/types/appNode";
 import { TaskRegistry } from "./task/Registry";
+import { ExecutorRegistry } from "./executor/registry";
+import { Environment } from "@/app/types/executor";
 
 export async function ExecuteWorkflow(executionId: string) {
 
@@ -24,17 +26,8 @@ export async function ExecuteWorkflow(executionId: string) {
 
     //  Setup execution environment
 
-    const environment = {
-        // phases: {
-        //     launchBrowser : {
-        //         inputs : {
-        //             websiteUrl : "www.google.com",
-        //         },
-        //         outputs : {
-        //             browser : "PuppeteerInstance",
-        //         },
-        //     },
-        // },
+    const environment: Environment = {
+        phases: {},
     }
 
 
@@ -58,9 +51,9 @@ export async function ExecuteWorkflow(executionId: string) {
         // await waitFor(3000);
         // execute phase
 
-        const phaseExecution = await executeWorkflowPhase(phase);
+        const phaseExecution = await executeWorkflowPhase(phase, environment);
 
-        if(!phaseExecution.success){
+        if (!phaseExecution.success) {
             executionFailed = true;
             break;
         }
@@ -96,7 +89,7 @@ async function intializeWorkflowExecution(executionId: string, workflowId: strin
             lastRunStatus: WorkflowExecutionStatus.RUNNING,
             lastRunId: executionId
         },
-    });
+    }).catch();
 
 
 
@@ -143,23 +136,24 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
         data: {
             lastRunStatus: finalStatus
         }
-    })
+    }).catch();
 
 
 }
 
 
-async function executeWorkflowPhase(phase: ExecutionPhase) {
+async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment) {
     const startedAt = new Date();
 
     const node = JSON.parse(phase.node) as CustomNode;
+    setupEnvironmentForPhase(node, environment);
 
     await prisma.executionPhase.update({
-        where : {
-            id : phase.id
+        where: {
+            id: phase.id
         },
-        data : {
-            status : ExecutionPhaseStatus.RUNNING,
+        data: {
+            status: ExecutionPhaseStatus.RUNNING,
             startedAt
         }
     });
@@ -170,28 +164,60 @@ async function executeWorkflowPhase(phase: ExecutionPhase) {
 
 
     // TODO : decrement  user balance (with required credits)
-    
-    await waitFor(2000);
 
-    const success  = Math.random() < 0.7;
+
+    // Execute phase 
+    const success = await executePhase(phase, node, environment);
 
     await finalizePhase(phase.id, success);
 
-    return {success};
+    return { success };
 }
 
 
-async function finalizePhase(phaseId : string, success : boolean) {
-    
-    const finalStatus = success ? ExecutionPhaseStatus.COMPLETED: ExecutionPhaseStatus.FAILED;
+async function finalizePhase(phaseId: string, success: boolean) {
+
+    const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
 
     await prisma.executionPhase.update({
-        where : {
-            id : phaseId
+        where: {
+            id: phaseId
         },
-        data : {
-            status : finalStatus,
-            completedAt : new Date()
+        data: {
+            status: finalStatus,
+            completedAt: new Date()
         }
     })
+}
+
+
+async function executePhase(phase: ExecutionPhase, node: CustomNode, environment: Environment): Promise<boolean> {
+
+    const runFn = ExecutorRegistry[node.data.type];
+    if (!runFn) {
+        return false;
+    }
+
+
+    return await runFn(environment);
+}
+
+
+async function setupEnvironmentForPhase(node: CustomNode, environment: Environment) {
+
+    environment.phases[node.id] = { inputs: {}, outputs: {} };
+
+    const inputs = TaskRegistry[node.data.type].inputs;
+
+    for (const input of inputs) {
+        const inputValue = node.data.inputs[input.name];
+
+        if (inputValue) {
+            environment.phases[node.id].inputs[input.name] = inputValue;
+            continue;
+        }
+
+        // Get input value from outputs
+    }
+
 }

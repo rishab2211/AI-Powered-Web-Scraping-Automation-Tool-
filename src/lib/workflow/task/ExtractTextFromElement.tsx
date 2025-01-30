@@ -9,24 +9,24 @@ export const ExtractTextFromElement = {
     <TextIcon className=" stroke-blue-400 " {...props} />
   ),
   isEntryPoint: false,
-  credits : 2,
-  inputs : [{
-    name: "HTML",
-    type : TaskParamType.STRING,
-    required : true,
-    variant : "textarea"
-  },
-  {
-    name: "Selector",
-    type : TaskParamType.STRING,
-    required : true,
-  }
-],
-  outputs : [
+  credits: 2,
+  inputs: [
     {
-        name :"Extracted text",
-        type : TaskParamType.STRING
+      name: "HTML",
+      type: TaskParamType.STRING,
+      required: true,
+      variant: "textarea",
     },
-    
-  ]
+    {
+      name: "Selector",
+      type: TaskParamType.STRING,
+      required: true,
+    },
+  ] as const,
+  outputs: [
+    {
+      name: "Extracted text",
+      type: TaskParamType.STRING,
+    },
+  ] as const,
 } satisfies WorkflowTask;

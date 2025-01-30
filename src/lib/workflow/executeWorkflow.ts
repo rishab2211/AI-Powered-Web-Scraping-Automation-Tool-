@@ -7,7 +7,9 @@ import { ExecutionPhase } from "@prisma/client";
 import { CustomNode } from "@/app/types/appNode";
 import { TaskRegistry } from "./task/Registry";
 import { ExecutorRegistry } from "./executor/registry";
-import { Environment } from "@/app/types/executor";
+import { Environment, ExecutionEnvironment } from "@/app/types/executor";
+import { TaskParamType } from "@/app/types/tasks";
+import { Browser, Page } from "puppeteer";
 
 export async function ExecuteWorkflow(executionId: string) {
 
@@ -154,7 +156,8 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
         },
         data: {
             status: ExecutionPhaseStatus.RUNNING,
-            startedAt
+            startedAt,
+            inputs : JSON.stringify(environment.phases[node.id].inputs)
         }
     });
 
@@ -198,8 +201,9 @@ async function executePhase(phase: ExecutionPhase, node: CustomNode, environment
         return false;
     }
 
+    const executionEnvironment : ExecutionEnvironment<any> = createExecutionEnvironment(node, environment); 
 
-    return await runFn(environment);
+    return await runFn(executionEnvironment);
 }
 
 
@@ -210,6 +214,8 @@ async function setupEnvironmentForPhase(node: CustomNode, environment: Environme
     const inputs = TaskRegistry[node.data.type].inputs;
 
     for (const input of inputs) {
+
+        if(input.type===TaskParamType.BROWSER_INSTANCE) {continue}
         const inputValue = node.data.inputs[input.name];
 
         if (inputValue) {
@@ -220,4 +226,14 @@ async function setupEnvironmentForPhase(node: CustomNode, environment: Environme
         // Get input value from outputs
     }
 
+}
+
+function createExecutionEnvironment(node : CustomNode, environment : Environment){
+    return({
+        getInput : (name : string)=> environment.phases[node.id]?.inputs[name],
+        getBrowser : ()=> environment.browser,
+        setBrowser : (browser: Browser) => (environment.browser = browser),
+        getPage:()=> environment.page,
+        setPage : (page : Page) => (environment.page = page)
+    })
 }

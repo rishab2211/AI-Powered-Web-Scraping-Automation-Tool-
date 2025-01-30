@@ -6,7 +6,10 @@ export async function PageToHtmlExecutor(environment: ExecutionEnvironment<typeo
     try {
 
         const html = await environment.getPage()!.content();
-        console.log("PAGE HTML", html);
+        console.log("----------THIS IS PAGE HTML-------" );
+        console.dir(html, {depth : null})
+
+        environment.setOutput("HTML",html);
         
         return true;
     } catch (err) {

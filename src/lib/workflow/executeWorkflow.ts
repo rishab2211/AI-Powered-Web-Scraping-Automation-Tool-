@@ -63,7 +63,10 @@ export async function ExecuteWorkflow(executionId: string) {
 
     // finalize execution
     await finalizeWorkflowExecution(executionId, execution.workflowId, executionFailed, creditsConsumed);
-    // TODO : clean up environment
+
+
+    // Clean up environment
+    await cleanupEnvironment(environment);
 
     revalidatePath("/workflow/runs")
 }
@@ -157,7 +160,7 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
         data: {
             status: ExecutionPhaseStatus.RUNNING,
             startedAt,
-            inputs : JSON.stringify(environment.phases[node.id].inputs)
+            inputs: JSON.stringify(environment.phases[node.id].inputs)
         }
     });
 
@@ -171,14 +174,15 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
 
     // Execute phase 
     const success = await executePhase(phase, node, environment);
+    const outputs = environment.phases[node.id].outputs;
 
-    await finalizePhase(phase.id, success);
+    await finalizePhase(phase.id, success, outputs);
 
     return { success };
 }
 
 
-async function finalizePhase(phaseId: string, success: boolean) {
+async function finalizePhase(phaseId: string, success: boolean, outputs : any) {
 
     const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
 
@@ -188,7 +192,8 @@ async function finalizePhase(phaseId: string, success: boolean) {
         },
         data: {
             status: finalStatus,
-            completedAt: new Date()
+            completedAt: new Date(),
+            outputs : JSON.stringify(outputs)
         }
     })
 }
@@ -201,7 +206,7 @@ async function executePhase(phase: ExecutionPhase, node: CustomNode, environment
         return false;
     }
 
-    const executionEnvironment : ExecutionEnvironment<any> = createExecutionEnvironment(node, environment); 
+    const executionEnvironment: ExecutionEnvironment<any> = createExecutionEnvironment(node, environment);
 
     return await runFn(executionEnvironment);
 }
@@ -215,7 +220,7 @@ async function setupEnvironmentForPhase(node: CustomNode, environment: Environme
 
     for (const input of inputs) {
 
-        if(input.type===TaskParamType.BROWSER_INSTANCE) {continue}
+        if (input.type === TaskParamType.BROWSER_INSTANCE) { continue }
         const inputValue = node.data.inputs[input.name];
 
         if (inputValue) {
@@ -228,12 +233,24 @@ async function setupEnvironmentForPhase(node: CustomNode, environment: Environme
 
 }
 
-function createExecutionEnvironment(node : CustomNode, environment : Environment){
-    return({
-        getInput : (name : string)=> environment.phases[node.id]?.inputs[name],
-        getBrowser : ()=> environment.browser,
-        setBrowser : (browser: Browser) => (environment.browser = browser),
-        getPage:()=> environment.page,
-        setPage : (page : Page) => (environment.page = page)
+function createExecutionEnvironment(node: CustomNode, environment: Environment) {
+    return ({
+        getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+        setOutput: (name: string, value: string) => {
+            environment.phases[node.id].outputs[name] = value;
+        },
+        getBrowser: () => environment.browser,
+        setBrowser: (browser: Browser) => (environment.browser = browser),
+        getPage: () => environment.page,
+        setPage: (page: Page) => (environment.page = page)
     })
+}
+
+
+
+async function cleanupEnvironment(environment: Environment) {
+    if (environment.browser) {
+        await environment.browser.close()
+            .catch((err) => console.error("Cannot close browser, reason:", err));
+    }
 }

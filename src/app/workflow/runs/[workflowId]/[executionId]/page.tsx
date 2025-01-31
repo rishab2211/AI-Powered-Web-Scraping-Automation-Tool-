@@ -31,8 +31,8 @@ export default async function ExecutionViewerPage({
   }
 
   return (
-    <div className="h-full w-full flex flex-col">
-      <Suspense fallback={<Loader2Icon className='"h-10 w-10 animate-spin ' />}>
+    <div className="h-full w-full  flex flex-col ">
+      <Suspense  fallback={<Loader2Icon className='"h-10 w-10 animate-spin ' />}>
         <ExecutionViewerPageWrapper executionId={executionId} />
       </Suspense>
     </div>
@@ -56,5 +56,7 @@ async function ExecutionViewerPageWrapper({
       <NotFound/>
     </div>;
   }
-  return <ExecutionViewer initialData={workflowExecution} />;
+  return <div className="h-full w-full ">
+    <ExecutionViewer initialData={workflowExecution} />
+  </div>;
 }

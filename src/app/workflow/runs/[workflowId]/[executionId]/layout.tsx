@@ -22,8 +22,8 @@ const layout = async ({
   const { executionId } = await params;
 
   const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
-  if(!workflowExecution){
-    return <NotFound/>
+  if (!workflowExecution) {
+    return <NotFound />;
   }
 
   return (
@@ -33,14 +33,14 @@ const layout = async ({
         title="workflow run details"
         subtitle={`Run ID : ${executionId}`}
         hideButtons={true}
-        
       />
       <SidebarProvider>
         <RunExecutionSidebar initialData={workflowExecution} />
-        
-        <main>
-        <SidebarTrigger className=" fixed bg-background" />
-          {children}</main>
+
+        <main className="w-full">
+          <SidebarTrigger className=" fixed bg-background" />
+          {children}
+        </main>
       </SidebarProvider>
     </div>
   );

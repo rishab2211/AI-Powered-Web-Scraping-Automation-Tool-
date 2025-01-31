@@ -6,6 +6,9 @@ export async function PageToHtmlExecutor(environment: ExecutionEnvironment<typeo
     try {
 
         const html = await environment.getPage()!.content();
+        if(html){
+            environment.log.info("Got HTML from the page successfully!")
+        }
         console.log("----------THIS IS PAGE HTML-------" );
         console.dir(html, {depth : null})
 

@@ -20,13 +20,14 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { WorkflowExecutionStatus } from "@/app/types/Workflows";
+import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/app/types/Workflows";
 import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
 import { formatDistanceToNow } from "date-fns";
 import { DatesToDurationString, GetPhasesTotalCost } from "@/lib/helper";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import PhaseExecutionStatusBadge from "./PhaseExecutionStatusBadge";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -112,7 +113,7 @@ export function RunExecutionSidebar({
               duration ? (
                 duration
               ) : (
-                <Loader2Icon className="animate-spin" size={18} />
+                <Loader2Icon className="animate-spin text-blue-600" size={18} />
               )
             }
             icon={TimerIcon}
@@ -143,7 +144,7 @@ export function RunExecutionSidebar({
                 {phase.name}
               </div>
 
-              <p className="text-xs text-muted-foreground">{phase.status}</p>
+             <PhaseExecutionStatusBadge status={phase.status as ExecutionPhaseStatus} />
             </SidebarMenuButton>
           ))}
         </SidebarMenuItem>

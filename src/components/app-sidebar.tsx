@@ -22,6 +22,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import UserAvailableCreditsBadge from "./UserAvailableCreditsBadge";
 
 // This is sample data
 const data = {
@@ -117,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <NavUser user={data.user} />
+          <UserAvailableCreditsBadge/>
         </SidebarFooter>
       </Sidebar>
     </div>

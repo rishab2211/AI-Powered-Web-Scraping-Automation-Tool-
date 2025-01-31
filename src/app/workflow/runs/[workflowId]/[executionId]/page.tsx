@@ -1,4 +1,4 @@
-import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
+import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
 import Topbar from "@/app/workflow/_components/topbar/Topbar";
 import { waitFor } from "@/lib/helper";
 import { auth } from "@clerk/nextjs/server";

@@ -1,4 +1,4 @@
-import { GetWorkflowsOfUser } from "@/actions/getWorkflowsOfUser";
+import { GetWorkflowsOfUser } from "@/actions/workflows/getWorkflowsOfUser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, WorkflowIcon } from "lucide-react";
 import CreateWorkflowDialog from "./CreateWorkflowDialog";

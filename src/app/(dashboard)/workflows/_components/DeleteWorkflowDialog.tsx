@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { DeleteWorkflow } from "@/actions/deleteWorkflow";
+import { DeleteWorkflow } from "@/actions/workflows/deleteWorkflow";
 import { toast } from "sonner";
 
 interface Props {

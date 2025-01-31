@@ -2,7 +2,7 @@ import Topbar from "@/app/workflow/_components/topbar/Topbar";
 import React, { ReactNode } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { RunExecutionSidebar } from "./_components/RunExecutionSidebar";
-import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
+import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
 import NotFound from "@/app/not-found";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;

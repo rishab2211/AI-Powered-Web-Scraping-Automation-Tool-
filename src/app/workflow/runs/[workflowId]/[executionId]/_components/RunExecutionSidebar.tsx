@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/app/types/Workflows";
-import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
+import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
 import { formatDistanceToNow } from "date-fns";
 import { DatesToDurationString, GetPhasesTotalCost } from "@/lib/helper";
 import { Badge } from "@/components/ui/badge";
@@ -61,7 +61,13 @@ export function RunExecutionSidebar({
 
   const handlePhaseSelect = (phaseId: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set("phase", phaseId);
+      // If the same phase is already selected, remove it
+      if (selectedPhase === phaseId) {
+        params.delete("phase");
+      } else {
+        // Otherwise, set the new phase
+        params.set("phase", phaseId);
+      }
     router.push(`?${params.toString()}`);
   };
 

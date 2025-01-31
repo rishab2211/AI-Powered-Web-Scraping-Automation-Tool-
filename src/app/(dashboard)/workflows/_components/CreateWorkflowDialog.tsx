@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createWorkflow } from "@/actions/createWorkflow";
+import { createWorkflow } from "@/actions/workflows/createWorkflow";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { waitFor } from "@/lib/helper";

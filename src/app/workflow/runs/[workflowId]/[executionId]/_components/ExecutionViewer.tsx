@@ -1,13 +1,13 @@
 "use client";
 
-import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
+import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
 import { useQuery } from "@tanstack/react-query";
 import { CoinsIcon, Loader2Icon, TimerIcon } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { DatesToDurationString } from "@/lib/helper";
 import { useSearchParams } from "next/navigation";
-import { GetWorkflowPhaseDetails } from "@/actions/getPhaseDetails";
+import { GetWorkflowPhaseDetails } from "@/actions/workflows/getPhaseDetails";
 import {
   Card,
   CardContent,
@@ -46,12 +46,12 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   });
 
   return (
-    <div className="h-full w-full flex-1   overflow-hidden pl-2 pt-7">
-      <div className="p-4">
+    <div className="h-full w-full flex-1 overflow-hidden pl-2 pt-7">
+      <div className="p-4 h-full">
         {/* if No phase is selected  */}
         {!selectedPhase && (
-          <div className="flex h-full flex-col items-center justify-center text-gray-600">
-            <p>No phase selected.</p>
+          <div className="flex h-full flex-col pb-20 items-center justify-center text-gray-600">
+            <p className="font-bold ">No phase selected.</p>
             <p>Select a phase to view details.</p>
           </div>
         )}

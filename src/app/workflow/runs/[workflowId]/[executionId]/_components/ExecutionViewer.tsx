@@ -1,42 +1,17 @@
 "use client";
 
 import { GetWorkflowExecutionWithPhases } from "@/actions/getWorkflowExecutionWithPhases";
-import { WorkflowExecutionStatus } from "@/app/types/Workflows";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
-import {
-  CircleCheck,
-  CircleDashedIcon,
-  CircleEllipsis,
-  CirclePlay,
-  CoinsIcon,
-  Loader2Icon,
-  LucideIcon,
-  Menu,
-  SquarePen,
-  TimerIcon,
-  WorkflowIcon,
-} from "lucide-react";
-import React, { ReactNode } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { Separator } from "@/components/ui/separator";
+import { CoinsIcon, Loader2Icon, TimerIcon } from "lucide-react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { DatesToDurationString } from "@/lib/helper";
-import { RunExecutionSidebar } from "./RunExecutionSidebar";
 import { useSearchParams } from "next/navigation";
 import { GetWorkflowPhaseDetails } from "@/actions/getPhaseDetails";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -95,13 +70,13 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
             {/* phase details */}
             <div className="flex gap-2 items-center">
               <Badge variant={"outline"} className="space-x-4 ">
-                <CoinsIcon className=" stroke-muted-foreground " />
+                <CoinsIcon size={20} className=" stroke-muted-foreground " />
                 <span>Credits</span>
                 <span>TODO</span>
               </Badge>
 
               <Badge variant={"outline"} className="space-x-4 ">
-                <CoinsIcon className=" stroke-muted-foreground " />
+                <TimerIcon size={20} className=" stroke-muted-foreground " />
                 <span>Duration</span>
                 <span>
                   {DatesToDurationString(
@@ -196,8 +171,8 @@ function LogViewer({ logs }: { logs: ExecutionLog[] | undefined }) {
             <TableHeader>
               <TableRow>
                 <TableHead className="hover:bg-gray-100 ">Time</TableHead>
-                <TableHead  className="hover:bg-gray-100 ">Level</TableHead>
-                <TableHead  className="hover:bg-gray-100 ">Message</TableHead>
+                <TableHead className="hover:bg-gray-100 ">Level</TableHead>
+                <TableHead className="hover:bg-gray-100 ">Message</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -206,8 +181,16 @@ function LogViewer({ logs }: { logs: ExecutionLog[] | undefined }) {
                   <TableRow key={log.id}>
                     <TableCell>{log.timestamp.toISOString()}</TableCell>
                     <TableCell
-                    className={cn("uppercase",log.logLevel==="error"? "text-destructive" : "text-primary",log.logLevel==="info"? "text-green-600" : "")}
-                    >{log.logLevel}</TableCell>
+                      className={cn(
+                        "uppercase",
+                        log.logLevel === "error"
+                          ? "text-destructive"
+                          : "text-primary",
+                        log.logLevel === "info" ? "text-green-600" : ""
+                      )}
+                    >
+                      {log.logLevel}
+                    </TableCell>
                     <TableCell>{log.message}</TableCell>
                   </TableRow>
                 ))}

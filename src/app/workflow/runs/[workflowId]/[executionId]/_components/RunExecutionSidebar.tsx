@@ -65,6 +65,8 @@ export function RunExecutionSidebar({
     router.push(`?${params.toString()}`);
   };
 
+  
+
   return (
     <Sidebar className=" top-[60px] p-1   ">
       <SidebarContent className="bg-background">
@@ -113,7 +115,7 @@ export function RunExecutionSidebar({
               duration ? (
                 duration
               ) : (
-                <Loader2Icon className="animate-spin text-blue-600" size={18} />
+                <Loader2Icon className="animate-spin text-yellow-500" size={18} />
               )
             }
             icon={TimerIcon}

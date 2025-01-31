@@ -7,7 +7,7 @@ const PhaseExecutionStatusBadge = ({status} : {status : ExecutionPhaseStatus}) =
         return (<CircleDashedIcon />)
         break;
     case ExecutionPhaseStatus.RUNNING:
-        return (<Loader2Icon  className="animate-spin text-blue-600"/>)
+        return (<Loader2Icon  className="animate-spin text-yellow-500"/>)
         break;
     case ExecutionPhaseStatus.COMPLETED:
         return (<CircleCheckIcon className="text-green-600"/>)
@@ -16,6 +16,7 @@ const PhaseExecutionStatusBadge = ({status} : {status : ExecutionPhaseStatus}) =
         return (<CircleXIcon className="text-destructive"/>)
         break;
     default:
+        return <p>{status}</p>
         break;
   }
 }

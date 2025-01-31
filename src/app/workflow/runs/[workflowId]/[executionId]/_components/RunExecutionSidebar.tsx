@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhaseExecutionStatusBadge from "./PhaseExecutionStatusBadge";
+import CreateCountupWrapper from "@/components/CreateCountupWrapper";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -128,7 +129,7 @@ export function RunExecutionSidebar({
           />
           <ExecutionLabel
             label={"CREDITS CONSUMED"}
-            value={creditsConsumed}
+            value={<CreateCountupWrapper value={creditsConsumed} />}
             icon={CoinsIcon}
           />
 

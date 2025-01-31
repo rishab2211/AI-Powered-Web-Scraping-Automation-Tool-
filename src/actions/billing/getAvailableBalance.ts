@@ -14,7 +14,7 @@ export async function GetAvailableCredits() {
         where : { userId}
     });
 
-    if(!balance) return 10000;
+    if(!balance) return -1;
 
     return balance.credits;
 }

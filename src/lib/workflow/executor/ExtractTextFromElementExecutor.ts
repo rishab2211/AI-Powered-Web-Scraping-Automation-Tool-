@@ -12,12 +12,14 @@ export async function ExtractTextFromElementExecutor(environment: ExecutionEnvir
             environment.log.error("selector is not provided.")
             return false;
         }
+        environment.log.info("Required Selector found")
 
         const html = environment.getInput("HTML");
         if (!html) {
             environment.log.error("HTML not defined.")
             return false;
         }
+        environment.log.info("Successfully fetched the HTML")
 
         const $ = cheerio.load(html);
         const element = $(Selector);
@@ -33,7 +35,7 @@ export async function ExtractTextFromElementExecutor(environment: ExecutionEnvir
         }
 
         environment.setOutput("Extracted text",extractedText);
-
+        environment.log.info("Successfully extracted Text from element.")
 
         return true;
     } catch (err : any) {

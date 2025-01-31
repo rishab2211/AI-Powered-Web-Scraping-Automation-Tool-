@@ -117,7 +117,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
+        <SidebarFooter className="mb-5">
           <UserAvailableCreditsBadge/>
         </SidebarFooter>
       </Sidebar>

@@ -72,7 +72,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
               <Badge variant={"outline"} className="space-x-4 ">
                 <CoinsIcon size={20} className=" stroke-muted-foreground " />
                 <span>Credits</span>
-                <span>TODO</span>
+                <span>{phaseDetails.data.creditCost}</span>
               </Badge>
 
               <Badge variant={"outline"} className="space-x-4 ">

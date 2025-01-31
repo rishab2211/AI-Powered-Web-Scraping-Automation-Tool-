@@ -12,8 +12,8 @@ export async function PageToHtmlExecutor(environment: ExecutionEnvironment<typeo
         environment.setOutput("HTML",html);
         
         return true;
-    } catch (err) {
-        console.log(err);
+    } catch (err : any) {
+        environment.log.error(err.message)
         return false;
 
     }

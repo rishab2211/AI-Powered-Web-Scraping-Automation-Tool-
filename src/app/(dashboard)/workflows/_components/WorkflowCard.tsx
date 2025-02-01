@@ -37,9 +37,9 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
             )}
           >
             {isDraft ? (
-              <FileTextIcon className="w-5 h-5" />
+              <FileTextIcon className="w-5 h-5 text-black/60" />
             ) : (
-              <PlayIcon className="w-5 h-5" />
+              <PlayIcon className="w-5 h-5 text-white" />
             )}
           </div>
           <div className=" flex w-full items-center justify-between">

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { PublishWorkflow } from "@/actions/workflows/publishWorkflow";
 import useExecutionPlan from "@/components/hooks/useExecutionPlan";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,11 @@ const PublishBtn = ({ workflowId }: { workflowId: string }) => {
   const saveMutation = useMutation({
     mutationFn: PublishWorkflow,
     onSuccess: () => {
-      toast.success("Workflow published.", { id: "flow-execution" });
+      toast.success("Workflow published.", { id: workflowId });
     },
     onError: () => {
       toast.error("Error occured while publishing workflow", {
-        id: "flow-execution",
+        id: workflowId,
       });
     },
   });
@@ -31,6 +31,8 @@ const PublishBtn = ({ workflowId }: { workflowId: string }) => {
           // client side validation
           return;
         }
+
+        toast.loading("Publishing workflow.", { id: workflowId });
 
         saveMutation.mutate({
           id: workflowId,

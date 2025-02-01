@@ -34,6 +34,7 @@
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.471.1",
     "next": "15.1.4",
+    "nextjs-toploader": "^3.7.15",
     "puppeteer": "^24.1.1",
     "react": "^18.3.1",
     "react-countup": "^6.5.3",

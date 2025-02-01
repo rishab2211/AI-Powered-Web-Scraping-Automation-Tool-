@@ -14,6 +14,7 @@ import { DatesToDurationString } from "@/lib/helper";
 import { cn } from "@/lib/utils";
 import { CoinsIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 type InitialDataType = Awaited<ReturnType<typeof GetWorkflowExecutions>>;
 
@@ -31,12 +32,14 @@ const ExecutionsTable = ({
     refetchInterval: 30_000, //30 seconds
   });
 
+  const router = useRouter();
+
   return (
-    <div className="border-rounded-lg shadow-md overflow-auto">
+    <div className="border-rounded-lg shadow-md lg:px-10 flex flex-col items-center justify-center  overflow-auto">
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader >
-          <TableRow >
+        <TableHeader>
+          <TableRow>
             <TableHead>Id</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Consumed</TableHead>
@@ -46,7 +49,13 @@ const ExecutionsTable = ({
         <TableBody>
           {query.data &&
             query.data.map((execution) => (
-              <TableRow key={execution.id}>
+              <TableRow
+                key={execution.id}
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push(`/workflow/runs/${workflowId}/${execution.id}`)
+                }}
+              >
                 <TableCell className="flex flex-col ">
                   {execution.id}
                   <span>

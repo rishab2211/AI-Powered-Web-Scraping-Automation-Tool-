@@ -46,7 +46,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   });
 
   return (
-    <div className="h-full w-full flex-1 overflow-hidden pl-2 pt-7">
+    <div className="h-full lg:px-40 w-full flex-1 overflow-hidden pl-2 pt-7">
       <div className="p-4 h-full">
         {/* if No phase is selected  */}
         {!selectedPhase && (

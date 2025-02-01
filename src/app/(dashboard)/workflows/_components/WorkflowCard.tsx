@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Workflow } from "@prisma/client";
 import {
@@ -23,7 +23,6 @@ const statusIconColors = {
 };
 
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
 
@@ -51,9 +50,11 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
               >
                 {workflow.name}
               </Link>
-              <span className=" ml-2 flex justify-center px-1 py-0.5 items-center  text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
-                DRAFT
-              </span>
+              {isDraft && (
+                <span className=" ml-2 flex justify-center px-1 py-0.5 items-center  text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
+                  DRAFT
+                </span>
+              )}
             </h3>
           </div>
         </div>
@@ -70,7 +71,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           >
             <Pencil /> edit
           </Link>
-          <WorkflowActions workflowId={workflow.id}  />
+          <WorkflowActions workflowId={workflow.id} />
         </div>
       </CardContent>
     </Card>

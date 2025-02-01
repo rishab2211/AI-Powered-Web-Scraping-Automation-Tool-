@@ -19,6 +19,9 @@ model Workflow{
  definition String
  status String   // DRAFT | PUBLISHED
 
+executionPlan   String?
+creditCost      Int @default(0)
+
  lastRun    DateTime?
  lastRunId  String?
  lastRunStatus    String?

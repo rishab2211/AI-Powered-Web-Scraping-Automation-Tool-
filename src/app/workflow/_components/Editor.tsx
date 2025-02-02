@@ -6,6 +6,7 @@ import Topbar from "./topbar/Topbar";
 import { TaskmenuSidebar } from "./taskMenu/taskMenuSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { FlowValidationContextProvider } from "@/components/context/FlowValidationContextType";
+import { WorkflowStatus } from "@/app/types/Workflows";
 
 const Editor = ({ workflow }: { workflow: Workflow }) => {
   return (
@@ -18,6 +19,7 @@ const Editor = ({ workflow }: { workflow: Workflow }) => {
               subtitle={workflow.name}
               workflowId={workflow.id}
               className="relative"
+              isPublished={workflow.status === WorkflowStatus.PUBLISHED}
             />
             <section>
               <SidebarProvider>

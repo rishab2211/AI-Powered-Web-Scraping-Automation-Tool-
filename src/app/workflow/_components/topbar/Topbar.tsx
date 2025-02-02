@@ -12,6 +12,7 @@ import ExecuteBtn from "./ExecuteBtn";
 import { cn } from "@/lib/utils";
 import NavigationTabs from "./NavigationTabs";
 import PublishBtn from "./PublishBtn";
+import UnPublishBtn from "./UnPublishBtn";
 
 interface Props {
   title: string;
@@ -19,6 +20,7 @@ interface Props {
   workflowId: string;
   hideButtons?: boolean;
   className?: string;
+  isPublished: boolean;
 }
 
 const Topbar = ({
@@ -27,6 +29,7 @@ const Topbar = ({
   workflowId,
   hideButtons = false,
   className,
+  isPublished = false,
 }: Props) => {
   return (
     <header className=" flex  p-2 border-b-2 border-separate z-50 justify-between w-full  h-[60px] sticky top-0 bg-background ">
@@ -47,7 +50,7 @@ const Topbar = ({
         </div>
 
         <div className="md:ml-10">
-          <NavigationTabs workflowId={workflowId}/>
+          <NavigationTabs workflowId={workflowId} />
         </div>
       </div>
 
@@ -55,8 +58,13 @@ const Topbar = ({
         {!hideButtons && (
           <>
             <ExecuteBtn workflowId={workflowId} />
-            <SaveBtn workflowId={workflowId} />
-            <PublishBtn workflowId={workflowId} />
+            {isPublished && <UnPublishBtn workflowId={workflowId} />}
+            {!isPublished && (
+              <>
+                <SaveBtn workflowId={workflowId} />
+                <PublishBtn workflowId={workflowId} />
+              </>
+            )}
           </>
         )}
       </div>

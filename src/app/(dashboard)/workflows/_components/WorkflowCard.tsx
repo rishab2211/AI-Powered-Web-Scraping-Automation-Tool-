@@ -16,6 +16,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import WorkflowActions from "./WorkflowActions";
 import { useState } from "react";
+import RunBtn from "./RunBtn";
 
 const statusIconColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
@@ -46,18 +47,20 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
             <h3 className=" flex w-full text-base font-bold text-muted-foreground ">
               <Link
                 href={`/workflow/editor/${workflow.id}`}
-                className=" flex items-center hover:underline "
+                className=" flex items-center break-words whitespace-normal truncate hover:underline "
               >
                 {workflow.name}
               </Link>
               {isDraft && (
-                <span className=" ml-2 flex justify-center px-1 py-0.5 items-center  text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
+                <span className="ml-2 flex justify-center px-1 py-0.5 items-center  text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full  ">
                   DRAFT
                 </span>
               )}
             </h3>
           </div>
+          
         </div>
+        {!isDraft && <RunBtn workflowId={workflow.id} />}
         <div className="flex gap-1">
           <Link
             href={`/workflow/editor/${workflow.id}`}

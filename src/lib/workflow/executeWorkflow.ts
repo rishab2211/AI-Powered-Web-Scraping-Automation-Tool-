@@ -243,7 +243,7 @@ async function executePhase(phase: ExecutionPhase, node: CustomNode, environment
 }
 
 
-async function setupEnvironmentForPhase(node: CustomNode, environment: Environment, edge: Edge[]) {
+async function setupEnvironmentForPhase(node: CustomNode, environment: Environment, edges: Edge[]) {
 
     environment.phases[node.id] = { inputs: {}, outputs: {} };
 
@@ -260,7 +260,7 @@ async function setupEnvironmentForPhase(node: CustomNode, environment: Environme
         }
 
         // Get input value from outputs in the environment
-        const connectedEdge = edge.find(edge => edge.target === node.id && edge.targetHandle === input.name);
+        const connectedEdge = edges.find(edge => edge.target === node.id && edge.targetHandle === input.name);
 
         if (!connectedEdge) {
             console.error("Missing edge for input", input.name, "node.id : ", node.id);

@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 
 export async function RunWorkflow(form: {
     workflowId: string;
-    flowDefinition: string;
+    flowDefinition?: string;
 }) {
 
     console.log("inside runWorkflow");
@@ -48,12 +48,14 @@ export async function RunWorkflow(form: {
     }
 
     let executionPlan: WorkflowExecutionPlan;
+    let workflowDefinition = flowDefinition;
     if (workflow.status === WorkflowStatus.PUBLISHED) {
         if (!workflow.executionPlan) {
             throw new Error("No execution plan found in the published workflow.");
         }
 
         executionPlan = JSON.parse(workflow.executionPlan);
+        workflowDefinition = workflow.definition;
     } else {
         if (!flowDefinition) {
             throw new Error("flow definition is not defined");
@@ -85,6 +87,7 @@ export async function RunWorkflow(form: {
             status: WorkflowExecutionStatus.PENDING,
             startedAt: new Date(),
             trigger: WorkflowExecutionTrigger.MANUAL,
+            definition : workflowDefinition,
             phases: {
                 create: executionPlan.flatMap(phase => {
                     return phase.nodes.flatMap((node) => {

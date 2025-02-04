@@ -24,15 +24,16 @@ import { toast } from "sonner";
 import cronstrue from "cronstrue";
 import { cn } from "@/lib/utils";
 import { isValid } from "date-fns";
+import { CancelCron } from "@/actions/workflows/CancelCron";
 
 const SchedulerDialog = ({
   creditsRequired,
   workflowId,
-  isCron
+  isCron,
 }: {
   creditsRequired: number;
   workflowId: string;
-  isCron : boolean;
+  isCron: boolean;
 }) => {
   const [cron, setCron] = useState("");
   const [validCron, setValidCron] = useState(false);
@@ -45,6 +46,16 @@ const SchedulerDialog = ({
     },
     onError: () => {
       toast.error("Some error may have occured...", { id: "cron" });
+    },
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: CancelCron,
+    onSuccess: () => {
+      toast.success("Canceled successfully...", { id: "cancel-cron" });
+    },
+    onError: () => {
+      toast.error("Some error may have occured...", { id: "cancel-cron" });
     },
   });
 
@@ -71,54 +82,86 @@ const SchedulerDialog = ({
           </div>
         </div>
       </DialogTrigger>
-      <DialogContent>
-        <CustomDialogHeader
-          title="Schedule workflow execution"
-          subTitle={`schedule this workflow as cron job, for automatic execution in future as you want.`}
-          icon={CalendarCheckIcon}
-        />
-
-        <div>
-          <p>
-            Specify a cron expression to schedule periodic execution.
-            <br />
-            All times are in UTC.
-          </p>
-          <Input
-            className="my-1"
-            value={cron}
-            onChange={(e) => {
-              setCron(e.target.value);
-            }}
-            placeholder="e.g., * * * * *"
-            type="text"
+      {isCron ? (
+        <DialogContent>
+          <CustomDialogHeader
+            title="Want to cancel upcoming runs?"
+            subTitle={`Press Yes to cancel upcoming executions & No to keep schedule as it is. `}
+            icon={Clock10Icon}
           />
-          <div className={cn("text-sm text-muted-foreground ")}>
-            {validCron ? readableCron : "Not a valid cron expression"}
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant={"outline"} className="w-full">
-              Cancel
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              className="w-full"
-              onClick={() => {
-                toast.info("Saving...", { id: cron });
-                saveMutation.mutate({
-                  id: workflowId,
-                  cron,
-                });
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={"outline"} className="w-full">
+                No
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  toast.info("Saving...", { id: cron });
+                  cancelMutation.mutate({
+                    id: workflowId,
+                    
+                  });
+                }}
+              >
+                Yes
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      ) : (
+        <DialogContent>
+          <CustomDialogHeader
+            title="Schedule workflow execution"
+            subTitle={`schedule this workflow as cron job, for automatic execution in future as you want.`}
+            icon={CalendarCheckIcon}
+          />
+
+          <div>
+            <p>
+              Specify a cron expression to schedule periodic execution.
+              <br />
+              All times are in UTC.
+            </p>
+            <Input
+              className="my-1"
+              value={cron}
+              onChange={(e) => {
+                setCron(e.target.value);
               }}
-            >
-              Save
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
+              placeholder="e.g., * * * * *"
+              type="text"
+            />
+            <div className={cn("text-sm text-muted-foreground ")}>
+              {validCron ? readableCron : "Not a valid cron expression"}
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={"outline"} className="w-full">
+                Cancel
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  toast.info("Saving...", { id: cron });
+                  saveMutation.mutate({
+                    id: workflowId,
+                    cron,
+                  });
+                }}
+              >
+                Save
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };

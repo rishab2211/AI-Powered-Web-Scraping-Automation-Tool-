@@ -25,6 +25,9 @@ creditCost      Int @default(0)
  lastRun    DateTime?
  lastRunId  String?
  lastRunStatus    String?
+ nextRunAt    DateTime?
+
+ cron     String? 
 
  createdAt DateTime @default(now())
  updateAt DateTime @updatedAt

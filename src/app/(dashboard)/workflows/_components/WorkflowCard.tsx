@@ -9,15 +9,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FileTextIcon, Pencil, PlayIcon } from "lucide-react";
+import {
+  CalendarSync,
+  CoinsIcon,
+  FileTextIcon,
+  Pencil,
+  PlayIcon,
+} from "lucide-react";
 import { WorkflowStatus } from "@/app/types/Workflows";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import WorkflowActions from "./WorkflowActions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RunBtn from "./RunBtn";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import SchedulerDialog from "./SchedulerDialog";
+import cronstrue from "cronstrue"
+import { read } from "fs";
 const statusIconColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
   [WorkflowStatus.PUBLISHED]: "bg-red-400 text-red-700",
@@ -26,11 +40,21 @@ const statusIconColors = {
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
+  const [isCron, setIsCron] = useState(false);
+  const [readableCron, setReadableCron] = useState("");
+
+  useEffect(() => {
+    if (workflow.cron) {
+      setIsCron(true);
+      const str = cronstrue.toString(workflow.cron);
+      setReadableCron(str);
+    }
+  }, [workflow]);
 
   return (
     <Card className=" border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md  dark:shadow-primary/30  ">
       <CardContent className="p-4 w-full flex gap-2 items-center justify-between h-[100px]">
-        <div className="flex gap-1">
+        <div className="flex  gap-1">
           <div
             className={cn(
               "p-1.5 rounded-full flex justify-center items-center",
@@ -43,7 +67,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
               <PlayIcon className="w-5 h-5 text-white" />
             )}
           </div>
-          <div className=" flex w-full items-center justify-between">
+          <div className=" flex flex-col w-full items-center justify-between">
             <h3 className=" flex w-full text-base font-bold text-muted-foreground ">
               <Link
                 href={`/workflow/editor/${workflow.id}`}
@@ -58,8 +82,16 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
               )}
             </h3>
           </div>
-          
         </div>
+        {!isDraft && (
+          <ScheduleSection
+            isCron={isCron}
+            workflowId={workflow.id}
+            creditsRequired={workflow.creditCost}
+            readableCron={readableCron}
+            
+          />
+        )}
         {!isDraft && <RunBtn workflowId={workflow.id} />}
         <div className="flex gap-1">
           <Link
@@ -82,3 +114,41 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
 };
 
 export default WorkflowCard;
+
+function ScheduleSection({
+  creditsRequired,
+  workflowId,
+  isCron,
+  readableCron
+}: {
+  creditsRequired: number;
+  workflowId: string;
+  isCron: boolean;
+  readableCron : string;
+}) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <SchedulerDialog
+              workflowId={workflowId}
+              creditsRequired={creditsRequired}
+              isCron={isCron}
+            />
+          </div>
+        </TooltipTrigger>
+        {isCron ? (
+          <TooltipContent>
+            Schedule to run {readableCron}
+            
+          </TooltipContent>
+        ) : (
+          <TooltipContent>
+            Schedule this workflow as cron job for {creditsRequired} credits.
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  );
+}

@@ -1,0 +1,126 @@
+import React, { ReactNode, useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  CalendarCheckIcon,
+  CalendarSync,
+  Clock10Icon,
+  CoinsIcon,
+} from "lucide-react";
+import CustomDialogHeader from "@/components/CustomDialogHeader";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { UpdateCronWorkflow } from "@/actions/workflows/updateCronWorkflow";
+import { toast } from "sonner";
+import cronstrue from "cronstrue";
+import { cn } from "@/lib/utils";
+import { isValid } from "date-fns";
+
+const SchedulerDialog = ({
+  creditsRequired,
+  workflowId,
+  isCron
+}: {
+  creditsRequired: number;
+  workflowId: string;
+  isCron : boolean;
+}) => {
+  const [cron, setCron] = useState("");
+  const [validCron, setValidCron] = useState(false);
+  const [readableCron, setReadableCron] = useState("");
+
+  const saveMutation = useMutation({
+    mutationFn: UpdateCronWorkflow,
+    onSuccess: () => {
+      toast.success("Scheduled successfully...", { id: "cron" });
+    },
+    onError: () => {
+      toast.error("Some error may have occured...", { id: "cron" });
+    },
+  });
+
+  useEffect(() => {
+    try {
+      const humanReadableCron = cronstrue.toString(cron);
+      setValidCron(true);
+      setReadableCron(humanReadableCron);
+    } catch (err) {
+      setValidCron(false);
+    }
+  }, [cron]);
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="p-1 cursor-pointer hover:shadow-md rounded hover:border">
+          <div>
+            {isCron ? <Clock10Icon /> : <CalendarSync />}
+            <div className="flex items-center gap-x-0.5 text-sm">
+              <CoinsIcon className="text-yellow-600" size={14} />
+              {creditsRequired}
+            </div>
+          </div>
+        </div>
+      </DialogTrigger>
+      <DialogContent>
+        <CustomDialogHeader
+          title="Schedule workflow execution"
+          subTitle={`schedule this workflow as cron job, for automatic execution in future as you want.`}
+          icon={CalendarCheckIcon}
+        />
+
+        <div>
+          <p>
+            Specify a cron expression to schedule periodic execution.
+            <br />
+            All times are in UTC.
+          </p>
+          <Input
+            className="my-1"
+            value={cron}
+            onChange={(e) => {
+              setCron(e.target.value);
+            }}
+            placeholder="e.g., * * * * *"
+            type="text"
+          />
+          <div className={cn("text-sm text-muted-foreground ")}>
+            {validCron ? readableCron : "Not a valid cron expression"}
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant={"outline"} className="w-full">
+              Cancel
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button
+              className="w-full"
+              onClick={() => {
+                toast.info("Saving...", { id: cron });
+                saveMutation.mutate({
+                  id: workflowId,
+                  cron,
+                });
+              }}
+            >
+              Save
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default SchedulerDialog;

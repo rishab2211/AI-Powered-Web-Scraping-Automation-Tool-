@@ -152,6 +152,7 @@ const SchedulerDialog = ({
                     cron,
                   });
                 }}
+                disabled={!validCron}
               >
                 Save
               </Button>

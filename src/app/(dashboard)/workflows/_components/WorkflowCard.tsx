@@ -11,12 +11,17 @@ import {
 } from "@/components/ui/card";
 import {
   CalendarSync,
+  ChevronRight,
   CoinsIcon,
   FileTextIcon,
   Pencil,
   PlayIcon,
 } from "lucide-react";
-import { WorkflowStatus } from "@/app/types/Workflows";
+import {
+  ExecutionPhaseStatus,
+  WorkflowExecutionStatus,
+  WorkflowStatus,
+} from "@/app/types/Workflows";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -30,8 +35,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import SchedulerDialog from "./SchedulerDialog";
-import cronstrue from "cronstrue"
+import cronstrue from "cronstrue";
 import { read } from "fs";
+import PhaseExecutionStatusBadge from "@/app/workflow/runs/[workflowId]/[executionId]/_components/PhaseExecutionStatusBadge";
+import ExecutionBadgeIndicator from "@/app/workflow/runs/[workflowId]/[executionId]/_components/ExecutionBadgeIndicator";
+import { formatDistanceToNow } from "date-fns";
 const statusIconColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
   [WorkflowStatus.PUBLISHED]: "bg-red-400 text-red-700",
@@ -48,7 +56,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
       setIsCron(true);
       const str = cronstrue.toString(workflow.cron);
       setReadableCron(str);
-    }else{
+    } else {
       setIsCron(false);
       setReadableCron("");
     }
@@ -92,7 +100,6 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
             workflowId={workflow.id}
             creditsRequired={workflow.creditCost}
             readableCron={readableCron}
-            
           />
         )}
         {!isDraft && <RunBtn workflowId={workflow.id} />}
@@ -112,6 +119,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           <WorkflowActions workflowId={workflow.id} />
         </div>
       </CardContent>
+      <LastRunDetails workflow={workflow} />
     </Card>
   );
 };
@@ -122,12 +130,12 @@ function ScheduleSection({
   creditsRequired,
   workflowId,
   isCron,
-  readableCron
+  readableCron,
 }: {
   creditsRequired: number;
   workflowId: string;
   isCron: boolean;
-  readableCron : string;
+  readableCron: string;
 }) {
   return (
     <TooltipProvider>
@@ -142,10 +150,7 @@ function ScheduleSection({
           </div>
         </TooltipTrigger>
         {isCron ? (
-          <TooltipContent>
-            Schedule to run {readableCron}
-            
-          </TooltipContent>
+          <TooltipContent>Schedule to run {readableCron}</TooltipContent>
         ) : (
           <TooltipContent>
             Schedule this workflow as cron job for {creditsRequired} credits.
@@ -153,5 +158,30 @@ function ScheduleSection({
         )}
       </Tooltip>
     </TooltipProvider>
+  );
+}
+
+function LastRunDetails({ workflow }: { workflow: Workflow }) {
+  const { lastRun, lastRunStatus,lastRunId } = workflow;
+  const formattedStartedAt =
+    lastRun && formatDistanceToNow(lastRun, { addSuffix: true });
+
+  return (
+    <div className="bg-primary/5 px-4 py-1 justify-between items-center">
+      <div className="flex items-center">
+        {lastRun && (
+          <Link href={`/workflow/runs/${workflow.id}/${lastRunId}`} className=" flex items-center text-sm gap-2 group ">
+            <span>Last run:</span>
+            <ExecutionBadgeIndicator
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <span>{lastRunStatus}</span>
+            <span>{formattedStartedAt}</span>
+            <ChevronRight className=" -translate-x-[2px] group-hover:translate-x-0 transition"/>
+          </Link>
+        )}
+        {!lastRun && <p>No runs yet</p>}
+      </div>
+    </div>
   );
 }

@@ -48,8 +48,11 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
       setIsCron(true);
       const str = cronstrue.toString(workflow.cron);
       setReadableCron(str);
+    }else{
+      setIsCron(false);
+      setReadableCron("");
     }
-  }, [workflow]);
+  }, [workflow, workflow.cron]);
 
   return (
     <Card className=" border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md  dark:shadow-primary/30  ">

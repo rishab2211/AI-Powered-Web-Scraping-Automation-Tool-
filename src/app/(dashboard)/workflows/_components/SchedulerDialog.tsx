@@ -3,10 +3,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -23,7 +20,6 @@ import { UpdateCronWorkflow } from "@/actions/workflows/updateCronWorkflow";
 import { toast } from "sonner";
 import cronstrue from "cronstrue";
 import { cn } from "@/lib/utils";
-import { isValid } from "date-fns";
 import { CancelCron } from "@/actions/workflows/CancelCron";
 
 const SchedulerDialog = ({
@@ -67,7 +63,7 @@ const SchedulerDialog = ({
     } catch (err) {
       setValidCron(false);
     }
-  }, [cron]);
+  }, [cron, isCron]);
 
   return (
     <Dialog>
@@ -127,15 +123,16 @@ const SchedulerDialog = ({
               All times are in UTC.
             </p>
             <Input
-              className="my-1"
+              className={cn("my-1 ",!validCron && "focus:border-destructive text-destructive")}
               value={cron}
               onChange={(e) => {
                 setCron(e.target.value);
               }}
               placeholder="e.g., * * * * *"
               type="text"
+              
             />
-            <div className={cn("text-sm text-muted-foreground ")}>
+            <div className={cn("text-sm text-muted-foreground ",!validCron && "text-destructive")}>
               {validCron ? readableCron : "Not a valid cron expression"}
             </div>
           </div>

@@ -16,6 +16,7 @@ import {
   FileTextIcon,
   Pencil,
   PlayIcon,
+  TimerIcon,
 } from "lucide-react";
 import {
   ExecutionPhaseStatus,
@@ -39,7 +40,9 @@ import cronstrue from "cronstrue";
 import { read } from "fs";
 import PhaseExecutionStatusBadge from "@/app/workflow/runs/[workflowId]/[executionId]/_components/PhaseExecutionStatusBadge";
 import ExecutionBadgeIndicator from "@/app/workflow/runs/[workflowId]/[executionId]/_components/ExecutionBadgeIndicator";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
+import { Separator } from "@/components/ui/separator";
+import {formatInTimeZone} from "date-fns-tz"
 const statusIconColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
   [WorkflowStatus.PUBLISHED]: "bg-red-400 text-red-700",
@@ -162,25 +165,49 @@ function ScheduleSection({
 }
 
 function LastRunDetails({ workflow }: { workflow: Workflow }) {
-  const { lastRun, lastRunStatus,lastRunId } = workflow;
+  const { lastRun, lastRunStatus, lastRunId, nextRunAt } = workflow;
   const formattedStartedAt =
     lastRun && formatDistanceToNow(lastRun, { addSuffix: true });
+
+  const formattedNextRunAt =
+    nextRunAt && format(nextRunAt,"yyyy-MM-dd HH:mm");
+
+  const formattedNextRunAtUTC = nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
 
   return (
     <div className="bg-primary/5 px-4 py-1 justify-between items-center">
       <div className="flex items-center">
         {lastRun && (
-          <Link href={`/workflow/runs/${workflow.id}/${lastRunId}`} className=" flex items-center text-sm gap-2 group ">
+          <Link
+            href={`/workflow/runs/${workflow.id}/${lastRunId}`}
+            className=" flex items-center text-sm gap-2 group "
+          >
             <span>Last run:</span>
             <ExecutionBadgeIndicator
               status={lastRunStatus as WorkflowExecutionStatus}
             />
             <span>{lastRunStatus}</span>
             <span>{formattedStartedAt}</span>
-            <ChevronRight className=" -translate-x-[2px] group-hover:translate-x-0 transition"/>
+            <ChevronRight className=" -translate-x-[2px] group-hover:translate-x-0 transition" />
           </Link>
         )}
         {!lastRun && <p>No runs yet</p>}
+      </div>
+      <Separator />
+      <div className="flex items-center">
+        {nextRunAt && (
+          <div className=" flex items-center text-sm gap-2 group ">
+            <span className="flex items-center gap-0.5">
+              <TimerIcon size={15} />
+              Next run:
+            </span>
+            <span>{formattedNextRunAt}</span>
+            <span>({formattedNextRunAtUTC} UTC)</span>
+
+            <ChevronRight className=" -translate-x-[2px] group-hover:translate-x-0 transition" />
+          </div>
+        )}
+        {!nextRunAt && <p>No runs scheduled</p>}
       </div>
     </div>
   );

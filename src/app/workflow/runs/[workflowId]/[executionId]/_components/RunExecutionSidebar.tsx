@@ -25,7 +25,7 @@ import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowE
 import { formatDistanceToNow } from "date-fns";
 import { DatesToDurationString, GetPhasesTotalCost } from "@/lib/helper";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhaseExecutionStatusBadge from "./PhaseExecutionStatusBadge";
 import CreateCountupWrapper from "@/components/CreateCountupWrapper";
@@ -37,7 +37,6 @@ export function RunExecutionSidebar({
 }: {
   initialData: ExecutionData;
 }) {
-  // const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
 
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
@@ -72,7 +71,7 @@ export function RunExecutionSidebar({
     router.push(`?${params.toString()}`);
   };
 
-  
+
 
   return (
     <Sidebar className=" top-[60px] p-1   ">
@@ -138,7 +137,7 @@ export function RunExecutionSidebar({
             PHASE
           </div>
 
-          {query?.data?.phases.map((phase, index) => (
+          {query.data?.phases.map((phase, index) => (
             <SidebarMenuButton
               key={phase.id}
               className="my-1 flex justify-between"

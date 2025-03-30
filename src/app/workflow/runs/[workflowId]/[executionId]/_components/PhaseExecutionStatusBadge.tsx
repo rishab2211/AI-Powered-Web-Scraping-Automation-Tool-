@@ -1,24 +1,29 @@
-import { ExecutionPhaseStatus } from "@/app/types/Workflows"
-import { CircleCheckIcon, CircleDashedIcon, CircleXIcon, Loader2Icon } from "lucide-react";
+import { ExecutionPhaseStatus } from "@/app/types/Workflows";
+import {
+  CircleCheckIcon,
+  CircleDashedIcon,
+  CircleXIcon,
+  Loader2Icon,
+} from "lucide-react";
 
-const PhaseExecutionStatusBadge = ({status} : {status : ExecutionPhaseStatus}) => {
+const PhaseExecutionStatusBadge = ({
+  status,
+}: {
+  status: ExecutionPhaseStatus;
+}) => {
   switch (status) {
     case ExecutionPhaseStatus.PENDING:
-        return (<CircleDashedIcon />)
-        break;
+      return <CircleDashedIcon />;
     case ExecutionPhaseStatus.RUNNING:
-        return (<Loader2Icon  className="animate-spin text-yellow-500"/>)
-        break;
+      return <Loader2Icon className="animate-spin text-yellow-500" />;
     case ExecutionPhaseStatus.COMPLETED:
-        return (<CircleCheckIcon className="text-green-600"/>)
-        break;
-    case ExecutionPhaseStatus.FAILED:
-        return (<CircleXIcon className="text-destructive"/>)
-        break;
-    default:
-        return <p>{status}</p>
-        break;
-  }
-}
+      return <CircleCheckIcon className="text-green-600" />;
 
-export default PhaseExecutionStatusBadge
+    case ExecutionPhaseStatus.FAILED:
+      return <CircleXIcon className="text-destructive" />;
+    default:
+      return <p>{status}</p>;
+  }
+};
+
+export default PhaseExecutionStatusBadge;

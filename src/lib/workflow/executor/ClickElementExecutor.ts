@@ -12,7 +12,8 @@ export async function ClickElementExecutor(environment: ExecutionEnvironment<typ
             environment.log.error("input->selector not found")
         }
 
-        await environment.getPage()!.click(selector);
+        const res = await environment.getPage()!.click(selector);
+        console.log("RESPONSE", res);
 
         return true;
     } catch (err: any) {

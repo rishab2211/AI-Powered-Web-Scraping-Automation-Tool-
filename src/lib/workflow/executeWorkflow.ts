@@ -104,7 +104,7 @@ async function intializeWorkflowExecution(executionId: string, workflowId: strin
             lastRun: new Date(),
             lastRunStatus: WorkflowExecutionStatus.RUNNING,
             lastRunId: executionId,
-            ...(nextRunAt && {nextRunAt}),
+            ...(nextRunAt && { nextRunAt }),
         },
     }).catch();
 
@@ -185,21 +185,20 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
 
 
     // decrement  user balance (with required credits)
-    const success = await decrementCredits(userId, creditsRequired, logCollector);
+    const creditsSuccess = await decrementCredits(userId, creditsRequired, logCollector);
+    const creditsConsumed = creditsSuccess ? creditsRequired : 0;
 
-    const creditsConsumed = success ? creditsRequired : 0;
-
-    if (success) {
+    let phaseSuccess = false;
+    if (creditsSuccess) {
         // Execute phase 
-        const success = await executePhase(phase, node, environment, logCollector);
+        phaseSuccess = await executePhase(phase, node, environment, logCollector);
     }
-
 
     const outputs = environment.phases[node.id].outputs;
 
-    await finalizePhase(phase.id, success, outputs, logCollector, creditsConsumed);
+    await finalizePhase(phase.id, phaseSuccess, outputs, logCollector, creditsConsumed);
 
-    return { success, creditsConsumed };
+    return { success: phaseSuccess, creditsConsumed };
 }
 
 

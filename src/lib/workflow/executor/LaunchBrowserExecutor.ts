@@ -22,20 +22,15 @@ export async function LaunchBrowserExecutor(environment: ExecutionEnvironment<ty
 
         console.log("THIS IS BROWSER PAGE INSTANCE: ", page);
 
-
-
         const navResponse = await page.goto(websiteUrl);
 
         console.log("THIS IS NAVIGATION RESPONSE");
         console.log(navResponse);
 
-
-
         environment.setPage(page);
         environment.log.info(`Opened page at ${websiteUrl}`)
 
         await waitFor(2000);
-        // await browser.close();
 
         return true;
     } catch (err: any) {

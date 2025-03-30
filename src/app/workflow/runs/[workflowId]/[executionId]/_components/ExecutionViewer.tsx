@@ -35,7 +35,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   const selectedPhase = searchParams.get("phase");
 
   const phaseDetails = useQuery({
-    queryKey: ["phaseDetails", selectedPhase],
+    queryKey: ["phaseDetails", selectedPhase,],
     enabled: selectedPhase !== null,
     queryFn: () => {
       if (!selectedPhase) {

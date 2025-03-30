@@ -42,7 +42,7 @@ import PhaseExecutionStatusBadge from "@/app/workflow/runs/[workflowId]/[executi
 import ExecutionBadgeIndicator from "@/app/workflow/runs/[workflowId]/[executionId]/_components/ExecutionBadgeIndicator";
 import { format, formatDistanceToNow } from "date-fns";
 import { Separator } from "@/components/ui/separator";
-import {formatInTimeZone} from "date-fns-tz"
+import { formatInTimeZone } from "date-fns-tz";
 import DuplicateWorkflowDialog from "./DuplicateWorkflowDialog ";
 
 const statusIconColors = {
@@ -96,7 +96,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
                   DRAFT
                 </span>
               )}
-              <DuplicateWorkflowDialog workflowId={workflow.id}  />
+              <DuplicateWorkflowDialog workflowId={workflow.id} />
             </h3>
           </div>
         </div>
@@ -107,7 +107,6 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
             creditsRequired={workflow.creditCost}
             readableCron={readableCron}
           />
-          
         )}
         {!isDraft && <RunBtn workflowId={workflow.id} />}
         <div className="flex gap-1">
@@ -173,23 +172,25 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
   const formattedStartedAt =
     lastRun && formatDistanceToNow(lastRun, { addSuffix: true });
 
-  const formattedNextRunAt =
-    nextRunAt && format(nextRunAt,"yyyy-MM-dd HH:mm");
+  const formattedNextRunAt = nextRunAt && format(nextRunAt, "yyyy-MM-dd HH:mm");
 
-  const formattedNextRunAtUTC = nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
+  const formattedNextRunAtUTC =
+    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
 
   return (
     <div className="bg-primary/5 px-4 py-1 ">
-      <div className="flex items-center ">
+      <div className="flex items-center w-full  ">
         {lastRun && (
           <Link
             href={`/workflow/runs/${workflow.id}/${lastRunId}`}
-            className=" flex items-center text-sm gap-2 group "
+            className=" w-full flex items-center justify-between text-sm gap-2 group "
           >
-            <span>Last run:</span>
-            <ExecutionBadgeIndicator
-              status={lastRunStatus as WorkflowExecutionStatus}
-            />
+            <span className="flex items-center gap-2">
+              <span>Last run:</span>
+              <ExecutionBadgeIndicator
+                status={lastRunStatus as WorkflowExecutionStatus}
+              />
+            </span>
             <span>{lastRunStatus}</span>
             <span>{formattedStartedAt}</span>
             <ChevronRight className=" -translate-x-[2px] group-hover:translate-x-0 transition" />
@@ -197,10 +198,10 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
         )}
         {!lastRun && <p>No runs yet</p>}
       </div>
-      <Separator/>
+      <Separator />
       <div className="flex items-center">
         {nextRunAt && (
-          <div className=" flex items-center text-sm gap-2 group ">
+          <div className=" w-full justify-between flex items-center text-sm gap-2 group ">
             <span className="flex items-center gap-0.5">
               <TimerIcon size={15} />
               Next run:

@@ -7,15 +7,16 @@ import StringParam from "./param/StringParam";
 import { useReactFlow } from "@xyflow/react";
 import { CustomNode } from "@/app/types/appNode";
 import BrowserInstanceParam from "./param/BrowserInstanceParam";
+import SelectParam from "./param/SelectParam";
 
 const NodeParamField = ({
   param,
   nodeId,
-  disabled
+  disabled,
 }: {
   param: TaskParam;
   nodeId: string;
-  disabled : boolean;
+  disabled: boolean;
 }) => {
   const { updateNodeData, getNode } = useReactFlow();
   const node = getNode(nodeId) as CustomNode;
@@ -40,18 +41,28 @@ const NodeParamField = ({
           param={param}
           value={value}
           updateNodeParamValue={updateNodeParamValue}
-          disabled = {disabled}
+          disabled={disabled}
         />
       );
 
     case TaskParamType.BROWSER_INSTANCE:
-        return (
-            <BrowserInstanceParam
-            param={param}
-            value={""}
-            updateNodeParamValue={updateNodeParamValue}
-            />
-        )
+      return (
+        <BrowserInstanceParam
+          param={param}
+          value={""}
+          updateNodeParamValue={updateNodeParamValue}
+        />
+      );
+    case TaskParamType.SELECT:
+      return (
+        <SelectParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+          disabled={disabled}
+          
+        />
+      );
     default:
       return (
         <div className="w-full">

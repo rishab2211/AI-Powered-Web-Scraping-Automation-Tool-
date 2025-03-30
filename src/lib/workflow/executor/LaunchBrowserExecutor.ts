@@ -11,7 +11,7 @@ export async function LaunchBrowserExecutor(environment: ExecutionEnvironment<ty
         console.log("Website URL :", websiteUrl);
 
         const browser = await puppeteer.launch({
-            headless: true, // for testing, means puppeteer will lauch a visible browser window
+            headless: false, // for testing, means puppeteer will lauch a visible browser window
             // chromium browser by default is not working correctly thats why we run it in google-chrome
             executablePath: '/usr/bin/google-chrome',
         });
@@ -25,7 +25,7 @@ export async function LaunchBrowserExecutor(environment: ExecutionEnvironment<ty
 
 
         const navResponse = await page.goto(websiteUrl);
-        
+
         console.log("THIS IS NAVIGATION RESPONSE");
         console.log(navResponse);
 
@@ -41,6 +41,5 @@ export async function LaunchBrowserExecutor(environment: ExecutionEnvironment<ty
     } catch (err: any) {
         environment.log.error(err.message)
         return false;
-
     }
 }

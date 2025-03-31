@@ -15,7 +15,7 @@ export function TaskmenuSidebar() {
       <SidebarContent>
         <Accordion
           type="multiple"
-          defaultValue={["extraction", "interactions", "timing"]}
+          defaultValue={["extraction", "interactions", "timing", "results"]}
         >
           <AccordionItem value="interactions">
             <AccordionTrigger className="font-bold p-2">
@@ -43,6 +43,15 @@ export function TaskmenuSidebar() {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col px-2 gap-1">
               <TaskmenuBtn taskType={TaskType.WAIT_FOR_ELEMENT} />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="results">
+            <AccordionTrigger className="font-bold p-2">
+              RESULT DELIVERY
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col px-2 gap-1">
+              <TaskmenuBtn taskType={TaskType.DELIVER_VIA_WEBHOOK} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

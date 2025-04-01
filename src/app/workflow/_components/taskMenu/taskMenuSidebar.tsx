@@ -24,6 +24,7 @@ export function TaskmenuSidebar() {
             <AccordionContent className="flex flex-col px-2 gap-1">
               <TaskmenuBtn taskType={TaskType.FILL_INPUT} />
               <TaskmenuBtn taskType={TaskType.CLICK_ELEMENT} />
+              <TaskmenuBtn taskType={TaskType.NAVIGATE_TO_URL} />
             </AccordionContent>
           </AccordionItem>
 

@@ -44,6 +44,7 @@ export function TaskmenuSidebar() {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col px-2 gap-1">
               <TaskmenuBtn taskType={TaskType.READ_PROPERTY_FROM_JSON} />
+              <TaskmenuBtn taskType={TaskType.ADD_PROPERTY_TO_JSON} />
             </AccordionContent>
           </AccordionItem>
 

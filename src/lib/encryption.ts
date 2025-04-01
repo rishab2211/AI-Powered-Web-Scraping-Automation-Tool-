@@ -22,7 +22,7 @@ export const symmetricEncrypt = (data: string) => {
 }
 
 
-export const symmetricDecrypt = async (encrypted: string) => {
+export const symmetricDecrypt = (encrypted: string) => {
     const key = process.env.ENCRYPTION_SECRET_KEY;
     if (!key) {
         throw new Error("Encryption key not found")
@@ -36,4 +36,6 @@ export const symmetricDecrypt = async (encrypted: string) => {
 
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
+    
+    return decrypted.toString();
 }

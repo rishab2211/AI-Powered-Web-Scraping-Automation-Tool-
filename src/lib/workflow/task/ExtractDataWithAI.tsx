@@ -34,10 +34,19 @@ export const ExtractDataWithAiTask = {
       required: true,
       variant: "textarea"
     },
+    {
+      name: "Property name",
+      type: TaskParamType.STRING,
+      required: false,
+    },
   ] as const,
   outputs: [
     {
       name: "Extracted data",
+      type: TaskParamType.STRING,
+    },
+    {
+      name: "Property value",
       type: TaskParamType.STRING,
     },
   ] as const,

@@ -15,7 +15,7 @@ export function TaskmenuSidebar() {
       <SidebarContent>
         <Accordion
           type="multiple"
-          defaultValue={["extraction", "interactions", "timing", "results"]}
+          defaultValue={["extraction", "interactions", "timing", "results","storage"]}
         >
           <AccordionItem value="interactions">
             <AccordionTrigger className="font-bold p-2">
@@ -35,6 +35,15 @@ export function TaskmenuSidebar() {
               <TaskmenuBtn taskType={TaskType.PAGE_TO_HTML} />
               <TaskmenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
               <TaskmenuBtn taskType={TaskType.EXTRACT_DATA_WITH_AI} />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="storage">
+            <AccordionTrigger className="font-bold p-2">
+              DATA STORAGE
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col px-2 gap-1">
+              <TaskmenuBtn taskType={TaskType.READ_PROPERTY_FROM_JSON} />
             </AccordionContent>
           </AccordionItem>
 

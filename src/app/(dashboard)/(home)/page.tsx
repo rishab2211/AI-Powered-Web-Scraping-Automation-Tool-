@@ -7,6 +7,8 @@ import { GetStatsCardsValues } from "@/actions/analytics/getStatsCardsValues";
 import { auth } from "@clerk/nextjs/server";
 import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from "lucide-react";
 import StatCard from "./_components/StatCard";
+import { GetWorkflowExecutionStats } from "@/actions/analytics/getWorkflowExecutionStats";
+import ExecutionStatusChart from "./_components/ExecutionStatusChart";
 
 const page = async ({
   searchParams,
@@ -31,6 +33,8 @@ const page = async ({
       <Suspense fallback={<StatsCardSkeleton />}>
         <StatsCards selectedPeriod={period} />
       </Suspense>
+
+      <StatsExecutionStatus selectedPeriod={period} />
     </div>
   );
 };
@@ -82,4 +86,14 @@ function StatsCardSkeleton() {
       ))}
     </div>
   );
+}
+
+async function StatsExecutionStatus({
+  selectedPeriod,
+}: {
+  selectedPeriod: Period;
+}) {
+  const data = await GetWorkflowExecutionStats(selectedPeriod);
+
+  return <ExecutionStatusChart data={data} />;
 }

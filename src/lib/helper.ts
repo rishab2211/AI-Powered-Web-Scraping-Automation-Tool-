@@ -1,7 +1,8 @@
 import { CustomNode } from "@/app/types/appNode";
 import { ExecutionPhase } from "@prisma/client";
-import { intervalToDuration } from "date-fns";
+import { endOfMonth, intervalToDuration, startOfMonth } from "date-fns";
 import { TaskRegistry } from "./workflow/task/Registry";
+import { Period } from "@/app/types/analytics";
 
 export function waitFor(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -29,6 +30,13 @@ export function DatesToDurationString(
     return `${duration.minutes || 0}min ${duration.seconds || 0}sec`
 }
 
+export const PeriodToDateRange = (period: Period) => {
+    const startDate = startOfMonth(new Date(period.year, period.month));
+    const endDate = endOfMonth(new Date(period.year, period.month));
+
+    return { startDate, endDate };
+}
+
 
 type Phase = Pick<ExecutionPhase, "creditCost">;
 
@@ -41,13 +49,13 @@ export function GetPhasesTotalCost(phases: Phase[]) {
 export function CalculateWorkflowCost(nodes: CustomNode[]) {
     return nodes.reduce((acc, node) => {
         return acc + TaskRegistry[node.data.type].credits;
-    },0)
+    }, 0)
 }
 
 
-export function getAppUrl(path : string){
-    
+export function getAppUrl(path: string) {
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-    
+
     return `${appUrl}/${path}`
 }

@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -21,14 +22,15 @@ type ChartData = Awaited<ReturnType<typeof GetWorkflowExecutionStats>>;
 
 const chartConfig = {
   success: {
-    labe: "Success",
-    color: "hsl(var(--chart-2))",
+    label: "Success",
+    color: "#008000", // Dark Green
   },
   failed: {
-    labe: "Failed",
-    color: "hsl(var(--chart-1))",
+    label: "Failed",
+    color: "#FF0000", // Red
   },
-};
+} satisfies ChartConfig;
+
 type Props = {
   data: ChartData;
 };
@@ -70,8 +72,18 @@ const ExecutionStatusChart = ({ data }: Props) => {
             />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Area dataKey={"success"} />
-            <Area dataKey={"failed"} />
+            <Area
+              type="monotone"
+              dataKey="success"
+              fill={chartConfig.success.color}
+              strokeWidth={2}
+            />
+            <Area
+              type="monotone"
+              dataKey="failed"
+              fill={chartConfig.failed.color}
+              strokeWidth={2}
+            />
           </AreaChart>
         </ChartContainer>
       </CardContent>

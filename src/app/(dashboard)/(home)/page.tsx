@@ -9,6 +9,9 @@ import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from "lucide-react";
 import StatCard from "./_components/StatCard";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/getWorkflowExecutionStats";
 import ExecutionStatusChart from "./_components/ExecutionStatusChart";
+import { waitFor } from "@/lib/helper";
+import { GetCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPeriod";
+import CreditsUsageChart from "./_components/CreditsUsageChart";
 
 const page = async ({
   searchParams,
@@ -34,7 +37,13 @@ const page = async ({
         <StatsCards selectedPeriod={period} />
       </Suspense>
 
-      <StatsExecutionStatus selectedPeriod={period} />
+      <Suspense fallback={<Skeleton className="w-full h-[300px]" />}>
+        <StatsExecutionStatus selectedPeriod={period} />
+      </Suspense>
+
+      <Suspense fallback={<Skeleton className="w-full h-[300px]" />}>
+        <CreditsUsageInPeriod selectedPeriod={period} />
+      </Suspense>
     </div>
   );
 };
@@ -93,7 +102,19 @@ async function StatsExecutionStatus({
 }: {
   selectedPeriod: Period;
 }) {
+
   const data = await GetWorkflowExecutionStats(selectedPeriod);
 
   return <ExecutionStatusChart data={data} />;
+}
+
+async function CreditsUsageInPeriod({
+  selectedPeriod,
+}: {
+  selectedPeriod: Period;
+}) {
+  const data = await GetCreditsUsageInPeriod(selectedPeriod);
+
+  // return <ExecutionStatusChart data={data} />;
+  return <CreditsUsageChart data={data} />
 }

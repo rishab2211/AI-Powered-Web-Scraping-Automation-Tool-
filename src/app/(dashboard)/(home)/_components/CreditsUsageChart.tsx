@@ -1,4 +1,5 @@
 "use client";
+import { GetCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPeriod";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/getWorkflowExecutionStats";
 import {
   Card,
@@ -15,18 +16,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { ChartBar } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { ChartBar, ChartColumnStacked } from "lucide-react";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-type ChartData = Awaited<ReturnType<typeof GetWorkflowExecutionStats>>;
+type ChartData = Awaited<ReturnType<typeof GetCreditsUsageInPeriod>>;
 
 const chartConfig = {
   success: {
-    label: "Success",
+    label: "Successful phases credits",
     color: "#008000", // Dark Green
   },
   failed: {
-    label: "Failed",
+    label: "Failed phases credits",
     color: "#FF0000", // Red
   },
 } satisfies ChartConfig;
@@ -35,21 +36,21 @@ type Props = {
   data: ChartData;
 };
 
-const ExecutionStatusChart = ({ data }: Props) => {
+const CreditsUsageChart = ({ data }: Props) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-2xl font-bold flex items-center gap-2">
-          <ChartBar className="w-6 h-6 text-primary" />
-          Workflow execution Status
+          <ChartColumnStacked className="w-6 h-6 text-primary" />
+          Daily credits spent
         </CardTitle>
         <CardDescription>
-          Daily number of successful and failed workflows executions
+          Daily credits spent in selected period
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="max-h-[200px] w-full">
-          <AreaChart
+          <BarChart
             data={data}
             height={200}
             accessibilityLayer
@@ -72,27 +73,23 @@ const ExecutionStatusChart = ({ data }: Props) => {
             />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Area
-              type="natural"
+            <Bar
               dataKey="success"
               fillOpacity={0.6}
               fill={chartConfig.success.color}
               strokeWidth={2}
-              stackId={"a"}
             />
-            <Area
-              type="natural"
+            <Bar
               dataKey="failed"
               fillOpacity={0.6}
               fill={chartConfig.failed.color}
               strokeWidth={2}
-              stackId={"a"}
             />
-          </AreaChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
   );
 };
 
-export default ExecutionStatusChart;
+export default CreditsUsageChart;

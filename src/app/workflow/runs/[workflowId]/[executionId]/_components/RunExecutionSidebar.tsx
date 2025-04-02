@@ -20,7 +20,10 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/app/types/Workflows";
+import {
+  ExecutionPhaseStatus,
+  WorkflowExecutionStatus,
+} from "@/app/types/Workflows";
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
 import { formatDistanceToNow } from "date-fns";
 import { DatesToDurationString, GetPhasesTotalCost } from "@/lib/helper";
@@ -37,7 +40,6 @@ export function RunExecutionSidebar({
 }: {
   initialData: ExecutionData;
 }) {
-
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
@@ -61,22 +63,20 @@ export function RunExecutionSidebar({
 
   const handlePhaseSelect = (phaseId: string) => {
     const params = new URLSearchParams(searchParams);
-      // If the same phase is already selected, remove it
-      if (selectedPhase === phaseId) {
-        params.delete("phase");
-      } else {
-        // Otherwise, set the new phase
-        params.set("phase", phaseId);
-      }
+    // If the same phase is already selected, remove it
+    if (selectedPhase === phaseId) {
+      params.delete("phase");
+    } else {
+      // Otherwise, set the new phase
+      params.set("phase", phaseId);
+    }
     router.push(`?${params.toString()}`);
   };
 
-
-
   return (
-    <Sidebar className=" top-[60px] p-1   ">
-      <SidebarContent className="bg-background">
-        <SidebarMenuItem className="list-none">
+    <Sidebar className=" top-[60px] h-screen p-1">
+      <SidebarContent className="bg-background h-full no-scrollbar">
+        <SidebarMenuItem className="list-none h-full ">
           <ExecutionLabel
             label={"STATUS"}
             value={query?.data?.status}
@@ -121,7 +121,10 @@ export function RunExecutionSidebar({
               duration ? (
                 duration
               ) : (
-                <Loader2Icon className="animate-spin text-yellow-500" size={18} />
+                <Loader2Icon
+                  className="animate-spin text-yellow-500"
+                  size={18}
+                />
               )
             }
             icon={TimerIcon}
@@ -137,24 +140,28 @@ export function RunExecutionSidebar({
             PHASE
           </div>
 
-          {query.data?.phases.map((phase, index) => (
-            <SidebarMenuButton
-              key={phase.id}
-              className="my-1 flex justify-between"
-              onClick={() => {
-                if(isRunning) return;
-                handlePhaseSelect(phase.id)
-              }}
-              variant={selectedPhase === phase.id ? "secondary" : "default"}
-            >
-              <div className="flex gap-1">
-                <Badge variant={"outline"}>{index + 1}</Badge>
-                {phase.name}
-              </div>
+          <section className=" pb-20">
+            {query.data?.phases.map((phase, index) => (
+              <SidebarMenuButton
+                key={phase.id}
+                className="my-1 flex justify-between"
+                onClick={() => {
+                  if (isRunning) return;
+                  handlePhaseSelect(phase.id);
+                }}
+                variant={selectedPhase === phase.id ? "secondary" : "default"}
+              >
+                <div className="flex gap-1">
+                  <Badge variant={"outline"}>{index + 1}</Badge>
+                  {phase.name}
+                </div>
 
-             <PhaseExecutionStatusBadge status={phase.status as ExecutionPhaseStatus} />
-            </SidebarMenuButton>
-          ))}
+                <PhaseExecutionStatusBadge
+                  status={phase.status as ExecutionPhaseStatus}
+                />
+              </SidebarMenuButton>
+            ))}
+          </section>
         </SidebarMenuItem>
       </SidebarContent>
     </Sidebar>

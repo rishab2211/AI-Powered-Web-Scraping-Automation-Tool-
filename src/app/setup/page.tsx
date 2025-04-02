@@ -1,13 +1,10 @@
-import { waitFor } from "@/lib/helper"
+import { SetupUser } from "@/actions/billing/setupUser";
 
-type Props = {}
+type Props = {};
 
 const SetupPage = async (props: Props) => {
+  
+  return await SetupUser();
+};
 
-    await waitFor(5000)
-  return (
-    <div>SetupPage</div>
-  )
-}
-
-export default SetupPage
+export default SetupPage;

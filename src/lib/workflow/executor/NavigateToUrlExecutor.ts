@@ -17,7 +17,9 @@ export async function NavigateToUrlExecutor(environment: ExecutionEnvironment<ty
 
         await environment.getPage()!.goto(url);
 
-        environment.log.info(`Visited URL: ${url}`)
+        environment.log.info(`Visited URL: ${url}`);
+
+        
 
         return true;
     } catch (err: any) {

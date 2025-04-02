@@ -25,6 +25,7 @@ export function TaskmenuSidebar() {
               <TaskmenuBtn taskType={TaskType.FILL_INPUT} />
               <TaskmenuBtn taskType={TaskType.CLICK_ELEMENT} />
               <TaskmenuBtn taskType={TaskType.NAVIGATE_TO_URL} />
+              <TaskmenuBtn taskType={TaskType.SCROLL_TO_ELEMENT} />
             </AccordionContent>
           </AccordionItem>
 

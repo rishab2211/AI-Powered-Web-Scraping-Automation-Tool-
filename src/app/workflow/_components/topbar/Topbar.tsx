@@ -20,7 +20,7 @@ interface Props {
   workflowId: string;
   hideButtons?: boolean;
   className?: string;
-  isPublished: boolean;
+  isPublished?: boolean;
 }
 
 const Topbar = ({

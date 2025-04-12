@@ -28,7 +28,7 @@
 ---
 
 ## 🖼️ Demo / Screenshots
-![Demo](public/demo-assets/workflow-automator-demo.gif)
+![Demo](public/demo-assets/demo-ai-webscrapper.gif)
 
 ---
 

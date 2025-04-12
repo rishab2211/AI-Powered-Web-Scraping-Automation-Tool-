@@ -27,6 +27,11 @@
 
 ---
 
+## 🖼️ Demo / Screenshots
+![Demo](public/demo-assets/workflow-automator-demo.gif)
+
+---
+
 ## 🚀 Getting Started
 
 ### Onboarding & Dashboard

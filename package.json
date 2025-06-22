@@ -39,6 +39,7 @@
     "dotenv": "^16.4.7",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.471.2",
+    "motion": "^12.18.1",
     "next": "^15.2.4",
     "nextjs-toploader": "^3.7.15",
     "puppeteer": "^24.1.1",

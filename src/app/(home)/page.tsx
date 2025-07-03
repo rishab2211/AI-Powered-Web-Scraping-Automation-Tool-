@@ -1,15 +1,11 @@
 import React from "react";
-import Navbar from "./_components/navbar";
-import { ContainerScroll } from "./_components/scroll-animation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Feats from "./_components/feats";
 import Link from "next/link";
-// import { GridBackground } from "./_components/grid-background";
 
-type Props = {};
 
-const Home = (props: Props) => {
+const Home = () => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}

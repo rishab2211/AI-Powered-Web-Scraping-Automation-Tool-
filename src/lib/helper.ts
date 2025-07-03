@@ -30,7 +30,9 @@ export function DatesToDurationString(
     return `${duration.minutes || 0}min ${duration.seconds || 0}sec`
 }
 
+
 export const PeriodToDateRange = (period: Period) => {
+    
     const startDate = startOfMonth(new Date(period.year, period.month));
     const endDate = endOfMonth(new Date(period.year, period.month));
 

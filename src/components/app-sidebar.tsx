@@ -8,7 +8,6 @@ import {
   ShieldCheckIcon,
   Workflow,
 } from "lucide-react";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,

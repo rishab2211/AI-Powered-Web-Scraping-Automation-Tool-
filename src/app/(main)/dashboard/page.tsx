@@ -1,3 +1,5 @@
+// server component
+
 import { GetPeriods } from "@/actions/analytics/getPeriods";
 import React, { Suspense } from "react";
 import PeriodSelector from "./_components/PeriodSelector";
@@ -9,30 +11,36 @@ import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from "lucide-react";
 import StatCard from "./_components/StatCard";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/getWorkflowExecutionStats";
 import ExecutionStatusChart from "./_components/ExecutionStatusChart";
-import { waitFor } from "@/lib/helper";
 import { GetCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPeriod";
 import CreditsUsageChart from "./_components/CreditsUsageChart";
 
-const page = async ({
-  searchParams,
-}: {
+type Prop = {
   searchParams: { month?: string; year?: string };
-}) => {
+};
+
+const page = async ({ searchParams }: Prop) => {
+  // this should be awaited acc. to nextjs docs
   const searchParamsData = await searchParams;
-  const currentDate = new Date();
-  const { month, year } = searchParamsData;
+  const currentDate = new Date(); // current data
+  const { month, year } = searchParamsData; // destructuring the data
+
+  // setting Period prop
   const period: Period = {
     month: month ? parseInt(month) : currentDate.getMonth(),
     year: year ? parseInt(year) : currentDate.getFullYear(),
   };
+
   return (
     <div className="flex flex-col gap-4 p-2">
+      {/* header of the dashboard */}
       <div className="flex justify-between">
         <div className="text-3xl font-bold">Home</div>
         <Suspense fallback={<Skeleton className="w-[180px] h-[40px]" />}>
           <PeriodSelectorWrapper selectedPeriod={period} />
         </Suspense>
       </div>
+
+      {/* stats cards */}
       <Suspense fallback={<StatsCardSkeleton />}>
         <StatsCards selectedPeriod={period} />
       </Suspense>
@@ -50,6 +58,7 @@ const page = async ({
 
 export default page;
 
+// fetching data and passing in component
 const PeriodSelectorWrapper = async ({
   selectedPeriod,
 }: {
@@ -60,12 +69,16 @@ const PeriodSelectorWrapper = async ({
 };
 
 const StatsCards = async ({ selectedPeriod }: { selectedPeriod: Period }) => {
+  // authenticating user
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthenticated");
   }
 
+  // fetching stats for selected period
   const data = await GetStatsCardsValues(selectedPeriod);
+
+  // render different data on separate card
   return (
     <div className="grid gap-4 lg:gap-8 lg:grid-cols-3 min-h-[120px">
       <StatCard
@@ -87,6 +100,7 @@ const StatsCards = async ({ selectedPeriod }: { selectedPeriod: Period }) => {
   );
 };
 
+// skeleton card for loading state
 function StatsCardSkeleton() {
   return (
     <div className="grid gap-4 lg:gap-8 lg:grid-cols-3 min-h-[120px ">
@@ -97,24 +111,29 @@ function StatsCardSkeleton() {
   );
 }
 
+// workflow execution status card, showing number of successful and failed executions
 async function StatsExecutionStatus({
   selectedPeriod,
 }: {
   selectedPeriod: Period;
 }) {
 
+  // fetching execution stats in a period
   const data = await GetWorkflowExecutionStats(selectedPeriod);
 
   return <ExecutionStatusChart data={data} />;
 }
 
+
+// stats of daily credits spent
 async function CreditsUsageInPeriod({
   selectedPeriod,
 }: {
   selectedPeriod: Period;
 }) {
+
+  // fetching credits usage
   const data = await GetCreditsUsageInPeriod(selectedPeriod);
 
-  // return <ExecutionStatusChart data={data} />;
-  return <CreditsUsageChart data={data} />
+  return <CreditsUsageChart data={data} />;
 }

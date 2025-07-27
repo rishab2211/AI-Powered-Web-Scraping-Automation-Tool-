@@ -10,7 +10,7 @@ export type CreditsPack = {
     label: string,
     credits: number,
     price: number
-}
+} | any;
 
 export const CreditsPack: CreditsPack[] = [
     {

@@ -1,4 +1,3 @@
-// "use client";
 import { ArrowRight } from "lucide-react";
 import { Feats } from "./_components/feats";
 import Link from "next/link";

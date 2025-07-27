@@ -1,52 +1,103 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Feats from "./_components/feats";
+// "use client";
+import { ArrowRight } from "lucide-react";
+import { Feats } from "./_components/feats";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import PricingSection from "./_components/pricing";
 
 
 const Home = () => {
   return (
-    <div className="flex flex-col">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="h-[100vh] flex flex-col items-center justify-center">
-        <div className="relative flex h-[50rem] w-full items-center justify-center bg-white dark:bg-black">
-          <div
-            className={cn(
-              "absolute inset-0",
-              "[background-size:40px_40px]",
-              "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-              "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
-            )}
-          />
-          {/* Radial gradient for the container to give a faded look */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
-          <div className="relative z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-7xl">
-            <div className="p-4">
-              <h1 className="text-5xl">
-                Unlock Powerful Insights
-                <br /> with Ease
-              </h1>
-              <h2 className="text-2xl text-neutral-200">
-                <i className="text-3xl">Automate</i> your workflows with our{" "}
-                <i className="text-3xl">no-code</i> automation tool
-              </h2>
+      <section className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-8 pt-20 pb-24">
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-neutral-100 text-neutral-600 text-sm font-medium mb-8">
+              ✨ Now available - No-code automation
             </div>
-            <div className="flex justify-center gap-2">
-              <Link href={"#features"}>
-                <Button variant={"destructive"}>Learn more</Button>
+            
+            {/* Main headline */}
+            <h1 className="text-5xl md:text-7xl font-bold text-neutral-900 mb-8 leading-tight tracking-tight">
+              Automate workflows
+              <br />
+              <span className="text-neutral-500">without code</span>
+            </h1>
+            
+            {/* Subheading */}
+            <p className="text-xl md:text-2xl text-neutral-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Transform your business processes with intelligent automation. 
+              Extract data, monitor changes, and gain insights—all without writing a single line of code.
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="/sign-up">
+                <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-8 py-4 rounded-full font-medium text-lg">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
               </Link>
-              <Link href={"/sign-up"}>
-                <Button>Signup</Button>
+              
+              <Link href="#features">
+                <Button variant="ghost" className="text-neutral-600 px-8 py-4 rounded-full font-medium text-lg">
+                  Learn More
+                </Button>
               </Link>
+            </div>
+            
+            {/* Social proof */}
+            <div className="mt-16 pt-8 border-t border-neutral-200">
+              <p className="text-sm text-neutral-500 mb-6">Trusted by teams at</p>
+              <div className="flex justify-center items-center space-x-12 opacity-60">
+                <div className="text-2xl font-bold text-neutral-400">Company</div>
+                <div className="text-2xl font-bold text-neutral-400">Startup</div>
+                <div className="text-2xl font-bold text-neutral-400">Enterprise</div>
+                <div className="text-2xl font-bold text-neutral-400">Agency</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        
+        {/* Subtle background decoration */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-neutral-100 rounded-full blur-3xl opacity-50" />
+          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-neutral-100 rounded-full blur-3xl opacity-50" />
+        </div>
+      </section>
 
       {/* Features Section */}
-
       <Feats />
+      
+      {/* Final CTA Section */}
+      <section className="py-24 bg-neutral-900">
+        <div className="max-w-4xl mx-auto px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to get started?
+          </h2>
+          <p className="text-xl text-neutral-300 mb-10 max-w-2xl mx-auto">
+            Join thousands of teams who have already transformed their workflows with our platform.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/sign-up">
+              <Button className="bg-white hover:bg-neutral-100 text-neutral-900 px-8 py-4 rounded-full font-medium text-lg">
+                Start Your Free Trial
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="ghost" className="text-white hover:text-neutral-200 border-white hover:border-neutral-200 px-8 py-4 rounded-full font-medium text-lg">
+                Contact Sales
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
+      <section>
+        <PricingSection/>
+      </section>
     </div>
   );
 };
